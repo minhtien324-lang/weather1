@@ -1,6 +1,6 @@
-import logo from './logo.svg';
+import React from 'react';
 import './App.css';
-
+import daily from './components/daily';
 function App() {
   return (
     <div className="App">
