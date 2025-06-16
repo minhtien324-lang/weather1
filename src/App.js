@@ -1,25 +1,26 @@
-import React from 'react';
-import './App.css';
-import daily from './components/daily';
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import { fetchCurrentWeather, fetchWeatherByCoordinates , fetchWeatherForecast, getWeatherIconUrl } from "./api/weatherApi";
+import React from "react";
+const [weatherData, setWeatherData] = useState(null);
+const [forecastData, setForecastData] = useState(null);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
 
-export default App;
+const fetchWeatherData = async (city) => {
+  setLoading(true);
+  setError(null);
+  try {
+    const geoData = await fetchWeatherByCoordinates(city);
+    const current =  await fetchCurrentWeather(geoData.name);
+    const forecast = await fetchWeatherForecast(geoData.lon, geoData.lat);
+
+    setWeatherData(current);
+    setForecastData(forecast);
+
+  } catch (err) {
+    setError("Lỗi khi lấy dữ liệu thời tiết");
+    console.error(err);
+  }
+  useEffect(() => {
+    fetchWeatherData('Hanoi'); // Thay 'Hanoi' bằng thành phố bạn muốn lấy dữ liệu
+  }, []);
+}
