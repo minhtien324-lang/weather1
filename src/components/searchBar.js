@@ -1,13 +1,39 @@
-import React from "react";
+import React, {useState} from "react";
 
-function SearchBar() {
+function SearchBar({ onSearch }) {
+    const [location, setLocation] = useState('');
+
+    const handleInputChange = (e) => {
+        setLocation(e.target.value);
+    };
+    const handleClickSearch = () => {
+       if (location.trim()){
+            onSearch(location.trim());
+            setLocation('');
+       }
+    };
+    const handlePress = (event) => {
+        if (event.key === 'Enter') {
+            handleClickSearch();
+        }
+    };
     return (
-        <div className="p-4 bg-white rounded-lg shadow-md flex items-center">
-            <input 
-                type="text"
-                placeholder="Tìm kiếm thành phố..."
-                className=" p-2 border border-gray-300 rounded-md w-full max-w-sm"/>
-                <button className="mt-2 bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600">Tìm Kiếm</button>
+        <div className="flex items-center space-x-2 p-2 bg-white rounded-xl shadow-stone-100 max-w-xl mx-auto">
+           <input 
+           type="text"
+           className="flex-grow p-3 rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-300 text-stone-700"
+                placeholder="Nhập tên thành phố..."
+                value={location}
+                onChange={handleInputChange}
+                onKeyPress={handlePress}
+                />
+                <button
+                onClick={handleClickSearch}
+                className="p-3 bg-orange-500 text-white rounded-lg 
+                hover:bg-orange-600 transition duration-200 ease-in-out shadow-md 
+                focus:outline-none focus:ring-2 focus:ring-orange-300 flex-shrink-0">
+                Tìm kiếm
+            </button>
         </div>
     )
 }
