@@ -1,39 +1,92 @@
-import React, {useState} from "react";
-
+import React, {useRef, useState} from "react";
+import {FaSearch , FaTimes} from "react-icons/fa";
+import {fetchWeatherByCoordinates} from "../api/weatherApi";
 function SearchBar({ onSearch }) {
     const [location, setLocation] = useState('');
+    const [suggestions, setSuggestions] = useState([]);
+    const [loadingSuggestions, setLoadingSuggestions] = useState(false);
+    const searchRef = useRef(null);
+    const debounce = (func, delay) => {
+        let timeoutId;
+        return (...args) => {
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+                timeoutId = setTimeout(() => {
+                func(...args);
+            }, delay);
+        };
+    };
+
+    const fetchSuggestionsDebounced = useRef(
+        debounce(async (query) => {
+            if(query.length > 2){
+                setLoadingSuggestions(true);
+                try{
+                    const data = await fetchWeatherByCoordinates(query);
+                    setSuggestions(data);
+                }
+                catch (error) {
+                    console.error("Lỗi khi lấy gợi ý địa điểm: ", error);
+                    setSuggestions([]);
+                }
+                finally {
+                    setLoadingSuggestions(false);
+                }
+            }else {
+                setSuggestions([]);
+            }
+        } , 500)
+
+    ).current;   
 
     const handleInputChange = (e) => {
-        setLocation(e.target.value);
+        const value = e.target.value;
+        setLocation(value);
+        fetchSuggestionsDebounced(value);
     };
-    const handleClickSearch = () => {
-       if (location.trim()){
-            onSearch(location.trim());
-            setLocation('');
-       }
-    };
-    const handlePress = (event) => {
-        if (event.key === 'Enter') {
-            handleClickSearch();
+
+    const handlePress = async (e) => {
+        if (e.key === 'Enter'){
+            if(suggestions.length > 0) {
+                handleSuggestionsClick(suggestions[0]);
+            }else{
+                suggestions([]);
+            }
         }
     };
+
+    
+    const handleSuggestionsClick =(suggestion) => {
+        const fullLocationName = `${suggestion.name}, ${suggestion.state ? suggestion.state + ', ' : ''}, ${suggestion.country}`;
+    };
+    const handleClearClick = () => {
+        setLocation('');
+        searchRef.current.focus();
+    };
     return (
-        <div className="flex items-center space-x-2 p-2 bg-white rounded-xl shadow-stone-100 max-w-xl mx-auto">
-           <input 
-           type="text"
-           className="flex-grow p-3 rounded-lg border border-stone-200 focus:outline-none focus:ring-2 focus:ring-orange-300 text-stone-700"
-                placeholder="Nhập tên thành phố..."
+        <div className="relative w-full" ref={searchRef}>
+          <div className="flex items-center border border-gray-300 rounded-full px-4 py-2 shadow-sm 
+          forcus-within:ring-2 forcus-within:ring-blue-300 
+          forcus-winthin:border-blue-500 transition-all duration-200">
+            <FaSearch className="text-gray-500 mr-3" />
+            <input
+                type="text"
                 value={location}
                 onChange={handleInputChange}
-                onKeyPress={handlePress}
+                onKeyDown={handlePress}
+                placeholder="Nhập tên thành phố..."
+                className="flex-grow outline-none text-gray-700 bg-transparent" 
                 />
+            {location && (
                 <button
-                onClick={handleClickSearch}
-                className="p-3 bg-orange-500 text-white rounded-lg 
-                hover:bg-orange-600 transition duration-200 ease-in-out shadow-md 
-                focus:outline-none focus:ring-2 focus:ring-orange-300 flex-shrink-0">
-                Tìm kiếm
-            </button>
+                    onClick={handleClearClick }
+                    className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                >
+                    <FaTimes />
+                </button>
+            )}
+          </div>
         </div>
     )
 }

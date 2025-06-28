@@ -1,6 +1,6 @@
 import { fetchCurrentWeather, fetchWeatherByCoordinates , fetchWeatherForecast, getWeatherIconUrl } from "./api/weatherApi";
 import React from "react";
-
+import "tailwindcss";
 import SearchBar from "./components/searchBar";
 import CurrentWeather from "./components/currentsWeather";
 import DailyWeather from "./components/daily";
@@ -31,7 +31,7 @@ function App() {
         }
     };
     useEffect(() => {
-        loadWeatherData("Lạng Sơn"); // Mặc định tải dữ liệu thời tiết cho Hà Nội khi ứng dụng khởi động
+        loadWeatherData("Lạng Sơn");
     }, []);
     return (
         <div className="min-h-screen bg-stone-50 p-4 md:p-8 flex flex-col items-center">
