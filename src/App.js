@@ -1,6 +1,6 @@
 import { fetchCurrentWeather, fetchWeatherByCoordinates , fetchWeatherForecast, getWeatherIconUrl } from "./api/weatherApi";
 import React from "react";
-import "tailwindcss";
+import "./index.css";
 import SearchBar from "./components/searchBar";
 import CurrentWeather from "./components/currentsWeather";
 import DailyWeather from "./components/daily";

@@ -51,23 +51,15 @@ function CurrentWeather({ weather, onToggleUnit, isCelsius }) {
                     <span className="text-sm text-gray-500">Tốc độ gió</span>
                 </div>
                  <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg shadow-sm">
-                    <PresureIcon /> {/* Icon áp suất cần được tùy chỉnh hoặc tìm icon phù hợp hơn */}
+                    <PresureIcon />
                     <span className="font-bold text-lg">{weather.main.pressure} hPa</span>
-                    <span className="text-sm text-gray-500">Áp suất</span>
+                    <span className="text-sm text-gray-500"> Áp suất</span>
                 </div>
                 <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg shadow-sm">
                     <FaEye className="text-3xl text-blue-500" />
                     <span className="font-bold text-lg">{weather.visibility / 1000} km</span>
                     <span className="text-sm text-gray-500">Tầm nhìn</span>
                 </div>
-                {/* Các thông số khác từ One Call API nếu cần (vd: chỉ số UV, điểm sương) */}
-                {weather.clouds && (
-                    <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg shadow-sm">
-                        <FaThermometerHalf className="text-3xl text-blue-500" /> {/* Dùng tạm */}
-                        <span className="font-bold text-lg">{weather.clouds.all}%</span>
-                        <span className="text-sm text-gray-500">Độ che phủ</span>
-                    </div>
-                )}
             </div>
         </div>
     );
