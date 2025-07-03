@@ -1,51 +1,74 @@
 import axios from 'axios';
 
-const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
+const API_KEY = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
 const BASE_URL = 'https://api.openweathermap.org/data/2.5';
-
-export const fetchCurrentWeather = async (location) => {
-    try {
-        let url = `${BASE_URL}/weather?q=${location}&appid=${API_KEY}&units=metric&lang=vi`;
-        if(location.lat && location.lon) {
-            url = `${BASE_URL}/weather?lat=${location.lat}&lon=${location.lon}&appid=${API_KEY}&units=metric&lang=vi`;
-        }
-        const response = await axios.get(url);
+const GEO_BASE_URL = 'http://api.openweathermap.org/geo/1.0';
+export const fetchGeoCoordinates = async (cityName) => {
+    try{
+        const response = await axios.get(`${GEO_BASE_URL}/direct`, {
+            params: {
+                q: cityName,
+                limit: 5,
+                appid: API_KEY,
+                lang: 'vi'
+            }
+        });
         return response.data;
     }catch (error) {
-        console.error("Lỗi khi lấy dữ liệu thời tiết hiện tại: ", error);
+        console.error("Error fetching weather by coordinates:", error);
         throw error;
     }
 };
 
-export const fetchWeatherForecast = async (lon, lat) => {
+export const fetchCurrentWeather = async (lat, lon) => {
     try {
-        const url = `${BASE_URL}/onecall?lat=${lat}&lon=${lon}&exclude=minutely,arlets&appid=${API_KEY}&units=metric&lang=vi`;
-        const response = await axios.get(url);
+        const response = await axios.get(`${BASE_URL}/weather`, {
+            params: {
+                lat: lat,
+                lon: lon,
+                appid: API_KEY,
+                units: 'metric',
+                lang: 'vi'
+            }
+        });
         return response.data;
-    }catch (error) {
-        console.error("Lỗi khi lấy dữ liệu dự báo thời tiết: ", error.response ? error.response.data : error.message);
-        throw error;
-    }
-};
-
-export const fetchWeatherByCoordinates = async (city) => {
-    try {
-        const url = `${BASE_URL}/weather?q=${city}&appid=${API_KEY}&units=metric&lang=vi`;
-        const response = await axios.get(url);
-        const {lat, lon} = response.data.coord;
-        const name = response.data.name;
-        return  {
-            name,
-            lat,
-            lon
-        };
     } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu thời tiết theo tọa độ: ", error);
+        console.error("Error fetching current weather:", error);
         throw error;
     }
 };
 
-export const getWeatherIconUrl = (iconCode) => {
-    if (!iconCode) return '';
-    return `http://openweathermap.org/img/wn/${iconCode}@2x.png`;
+export const fetchFiveDayForecast = async (lat, lon) => {
+    try {
+        const response = await axios.get(`${BASE_URL}/forecast`, {
+            params: {
+                lat: lat,
+                lon: lon,
+                appid: API_KEY,
+                units: 'metric',
+                lang: 'vi'
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching 5-day forecast:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const fetchCurrentWeatherSimple = async (location) => {
+    try{
+        const response = await axios.get(`${BASE_URL}/weather`, {
+            params: {
+                q: location,
+                appid: API_KEY,
+                units: 'metric',
+                lang: 'vi'
+            }
+        });
+        return response.data;
+    }catch (error) {
+        console.error("Lỗi khi tải thời tiết hiện tại đơn giản:", error.response?.data || error.message);
+        throw error;
+    }
 };

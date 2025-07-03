@@ -3,7 +3,7 @@ import {
     WiDaySunny, WiCloudy, WiCloudyGusts, WiFog, WiRain, WiShowers,
     WiThunderstorm, WiSnow, WiSleet, WiDust, WiSmoke, WiTornado, WiStrongWind,
     WiHumidity, WiDirectionUp
-} from "weather-icons-react"
+} from "weather-icons-react";
 
 export const getWeatherIcon = (iconCode, className = "text-5xl") => {
     switch (iconCode) {

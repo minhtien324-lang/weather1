@@ -1,6 +1,6 @@
 import React, {useRef, useState, useEffect} from "react";
 import {FaSearch , FaTimes} from "react-icons/fa";
-import {fetchWeatherByCoordinates} from "../api/weatherApi";
+import {fetchGeoCoordinates} from "../api/weatherApi";
 function SearchBar({ onSearch }) {
     const [location, setLocation] = useState('');
     const [suggestions, setSuggestions] = useState([]);
@@ -23,7 +23,7 @@ function SearchBar({ onSearch }) {
             if(query.length > 2){
                 setLoadingSuggestions(true);
                 try{
-                    const data = await fetchWeatherByCoordinates(query);
+                    const data = await fetchGeoCoordinates(query);
                     setSuggestions(data);
                 }
                 catch (error) {
@@ -46,15 +46,6 @@ function SearchBar({ onSearch }) {
         fetchSuggestionsDebounced(value);
     };
 
-    const handlePress = async (e) => {
-        if (e.key === 'Enter'){
-            if(suggestions.length > 0) {
-                handleSuggestionsClick(suggestions[0]);
-            }else{
-                suggestions([]);
-            }
-        }
-    };
 
     const handleSearchClick = () => {
         if(location.trim() !== '') {
@@ -64,12 +55,20 @@ function SearchBar({ onSearch }) {
             searchRef.current.blur();
         }
     };
-
+    const handleKeyPress = (e) => {
+        if (e.key === 'Enter') {
+            if(suggestions.length > 0) {
+                handleSuggestionsClick(suggestions[0]);
+            }else {
+                handleSearchClick();
+            }
+        }
+    }
     const handleSuggestionsClick =(suggestion) => {
         const fullLocationName = `${suggestion.name}, ${suggestion.state ? suggestion.state + ', ' : ''}, ${suggestion.country}`;
         setLocation(fullLocationName);
         onSearch(suggestion);
-        suggestions([]);
+        setSuggestions([]);
     };
     const handleClearClick = () => {
         setLocation('');
@@ -86,7 +85,7 @@ function SearchBar({ onSearch }) {
                 type="text"
                 value={location}
                 onChange={handleInputChange}
-                onKeyDown={handlePress}
+                onKeyDown={handleKeyPress}
                 placeholder="Nhập tên thành phố..."
                 className="flex-grow outline-none text-gray-700 bg-transparent" 
                 />

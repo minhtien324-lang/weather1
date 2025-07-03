@@ -1,11 +1,21 @@
 import React from "react";
-import { getWeatherIconUrl  } from "../api/weatherApi";
+
 import {getWeatherIcon, HumidityIcon, WindIcon, PresureIcon } from "./weatherIcons";
 import { FaEye, FaThermometerHalf } from "react-icons/fa";
+
 function CurrentWeather({ weather, onToggleUnit, isCelsius }) {
-    if(!weather) return null;
-    const temperature = isCelsius ? weather.main.temp : (weather.main.temp * 9/5) + 32;
-    const feelsLike = isCelsius ? weather.main.feels_like : (weather.main.feels_like * 9/5) + 32;
+    if (!weather || !weather.main) {
+        console.warn("Weather data or weather.main is missing:", weather);
+        return null; 
+    }
+    const { temp, feels_like, humidity, pressure } = weather.main;
+    const windSpeed = weather.wind.speed;
+    const visibility = weather.visibility;
+    const description = weather.weather[0].description;
+    const iconCode = weather.weather[0].icon;
+
+    const temperature = isCelsius ? temp : (temp * 9/5) + 32;
+    const feelsLike = isCelsius ? feels_like : (feels_like * 9/5) + 32;
     const unit = isCelsius ? '°C' : '°F';
     const date = new Date(weather.dt * 1000);
     const timeString = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
@@ -28,7 +38,7 @@ function CurrentWeather({ weather, onToggleUnit, isCelsius }) {
 
             <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-6">
                 <div className="flex items-center">
-                    {getWeatherIconUrl(weather.weather[0].icon, "text-8xl")}
+                    {getWeatherIcon(weather.weather[0].icon, "text-8xl")}
                     <span className="text-7xl md:text8xl font-bold text-blue-600 leading-none ml-4">
                         {Math.round(temperature)}{unit}
                     </span>
