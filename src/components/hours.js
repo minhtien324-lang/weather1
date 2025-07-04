@@ -1,9 +1,9 @@
 import React from "react";
-import { getWeatherIcon } from "./weatherIcons";
+import { getWeatherIcon } from "./WeatherIcons";
 
 function Hours({hourlyData, isCelsius}) {
    if (!hourlyData || !Array.isArray(hourlyData) || hourlyData.length === 0) {
-        console.warn("Hourly data is missing, not an array, or empty:", hourlyData);
+        // console.warn("Hourly data is missing, not an array, or empty:", hourlyData);
         return null;
     }
   const hoursToDisplay = hourlyData.slice(1, 25);

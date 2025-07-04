@@ -1,10 +1,10 @@
 import { fetchGeoCoordinates, fetchFiveDayForecast , fetchCurrentWeatherSimple} from "./api/weatherApi"
-import { getWeatherIcon } from "./components/weatherIcons"
+import { getWeatherIcon } from "./components/WeatherIcons"
 import "./index.css"
-import SearchBar from "./components/searchBar"
-import CurrentWeather from './components/currentsWeather'
-import DailyWeather from './components/daily'
-import Hours from './components/hours'
+import SearchBar from "./components/SearchBar"
+import CurrentWeather from './components/CurrentWeather'
+import DailyWeather from './components/DailyWeather'
+import Hours from './components/Hours'
 import React , { useEffect, useState } from 'react'
 function App() {
     const[currentWeather, setCurrentWeather] = useState(null);
@@ -91,18 +91,11 @@ function App() {
         console.log("Current Weather State:", CurrentWeather);
         console.log("Hourly Forecast State:", Hours);
         console.log("Daily Forecast State:", DailyWeather);
-        handleSearch("Hà Nội"); // Mặc định tìm kiếm Hà Nội khi ứng dụng khởi động
+        handleSearch("Ha Noi"); // Mặc định tìm kiếm Hà Nội khi ứng dụng khởi động
     }, [CurrentWeather, Hours, DailyWeather]);
     const toggleUnit = () => {
         setIsCelsius(prev => !prev);
     };
-    console.log("DEBUG: App Component Render Cycle");
-    console.log("DEBUG: loading =", loading);
-    console.log("DEBUG: error =", error);
-    console.log("DEBUG: currentWeather =", CurrentWeather);
-    console.log("DEBUG: hourlyForecast.length =", Hours.length);
-    console.log("DEBUG: dailyForecast.length =", DailyWeather.length);
-    console.log("DEBUG: All conditions met for rendering main content =", !loading && !error && !!CurrentWeather);
     return (
         <div className="min-h-screen bg-stone-50 p-4 flex flex-col items-center">
             <div className="w-full max-w-4xl bg-white rounded-2xl shadow-xl p-6 md:p-10 my-8">

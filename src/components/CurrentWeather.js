@@ -1,6 +1,6 @@
 import React from "react";
 
-import {getWeatherIcon, HumidityIcon, WindIcon, PresureIcon } from "./weatherIcons";
+import {getWeatherIcon, HumidityIcon, WindIcon, PresureIcon } from "./WeatherIcons";
 import { FaEye, FaThermometerHalf } from "react-icons/fa";
 
 function CurrentWeather({ weather, onToggleUnit, isCelsius }) {

@@ -1,9 +1,9 @@
 import React from "react";
-import { getWeatherIcon } from "./weatherIcons";
+import { getWeatherIcon } from "./WeatherIcons";
 
 function DailyWeather({ dailyData, isCelsius }) {
     if (!dailyData || !Array.isArray(dailyData) || dailyData.length === 0) {
-        console.warn("daily data is missing, not an array, or empty:", dailyData);
+        // Dữ liệu dailyData không hợp lệ hoặc rỗng
         return null;
     }
 
