@@ -1,0 +1,163 @@
+/* CurrentWeather.module.css */
+.container {
+  position: relative;
+  background: linear-gradient(135deg, #eff6ff 0%, #ffffff 100%);
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 2rem;
+  }
+}
+
+.toggleButton {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: #e5e7eb;
+  color: #374151;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggleButton:hover {
+  background-color: #d1d5db;
+}
+
+.cityName {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: #292524;
+  margin-bottom: 0.25rem;
+}
+
+@media (min-width: 768px) {
+  .cityName {
+    font-size: 3rem;
+  }
+}
+
+.dateTime {
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin-bottom: 1rem;
+}
+
+.weatherMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .weatherMain {
+    flex-direction: row;
+    gap: 2rem;
+  }
+}
+
+.weatherIcon {
+  font-size: 6rem;
+}
+
+@media (min-width: 768px) {
+  .weatherIcon {
+    font-size: 8rem;
+  }
+}
+
+.temperature {
+  font-size: 4rem;
+  font-weight: 800;
+  color: #2563eb;
+  line-height: 1;
+  margin-left: 1rem;
+}
+
+@media (min-width: 768px) {
+  .temperature {
+    font-size: 6rem;
+  }
+}
+
+.weatherDescription {
+  text-align: left;
+}
+
+@media (min-width: 768px) {
+  .weatherDescription {
+    text-align: right;
+  }
+}
+
+.description {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #374151;
+  text-transform: capitalize;
+}
+
+.feelsLike {
+  font-size: 1.125rem;
+  color: #6b7280;
+  margin-top: 0.25rem;
+}
+
+.weatherDetails {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 2rem;
+  color: #374151;
+}
+
+@media (min-width: 768px) {
+  .weatherDetails {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .weatherDetails {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.detailItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #eff6ff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.detailIcon {
+  font-size: 1.875rem;
+  color: #2563eb;
+  margin-bottom: 0.5rem;
+}
+
+.detailValue {
+  font-weight: 700;
+  font-size: 1.125rem;
+  margin-bottom: 0.25rem;
+}
+
+.detailLabel {
+  font-size: 0.875rem;
+  color: #6b7280;
+} 

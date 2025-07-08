@@ -1,0 +1,71 @@
+/* DailyWeather.module.css */
+.container {
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 1rem;
+}
+
+.daysList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.dayItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  background-color: #eff6ff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid transparent;
+  transition: border-color 0.2s;
+  cursor: pointer;
+}
+
+.dayItem:hover {
+  border-color: #3b82f6;
+}
+
+.dayName {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+  width: 7rem;
+  flex-shrink: 0;
+}
+
+.weatherIcon {
+  width: 3rem;
+  height: 3rem;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.temperatureContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.highTemp {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.lowTemp {
+  font-size: 1.25rem;
+  color: #6b7280;
+} 

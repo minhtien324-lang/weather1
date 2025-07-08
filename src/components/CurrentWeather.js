@@ -1,7 +1,7 @@
 import React from "react";
-
 import {getWeatherIcon, HumidityIcon, WindIcon, PresureIcon } from "./WeatherIcons";
-import { FaEye, FaThermometerHalf } from "react-icons/fa";
+import { FaEye } from "react-icons/fa";
+import styles from "../styles/CurrentWeather.module.css";
 
 function CurrentWeather({ weather, onToggleUnit, isCelsius }) {
     if (!weather || !weather.main) {
@@ -23,52 +23,51 @@ function CurrentWeather({ weather, onToggleUnit, isCelsius }) {
     const cityName = weather.name ;
     const countryCode = weather.sys.country;
     return (
-        <div className="relative bg-gradient-to-br from-blue-50 to-white p-6 md:p-8 rounded-xl shadow-mt text-center">
+        <div className={styles.container}>
             <button
                 onClick={onToggleUnit}
-                className="absolute top-4 right-4 bg-gray-200 text-gray-700
-                px-3 py-1 rounded-full text-sm font-semibold hover:bg-gray-300 transition-colors"
+                className={styles.toggleButton}
                 >
                     {isCelsius ? '°F' : '°C'}
             </button>
-            <h2 className="text-4xl md:text-5xl font-bold text-stone-800 mb-1 ">
+            <h2 className={styles.cityName}>
                 {cityName}, {countryCode}
             </h2>
-            <p className="text-lg text-gray-600 mb-4">{dateString}  {timeString}</p>
+            <p className={styles.dateTime}>{dateString}  {timeString}</p>
 
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-8 mb-6">
-                <div className="flex items-center">
+            <div className={styles.weatherMain}>
+                <div className={styles.weatherIcon}>
                     {getWeatherIcon(weather.weather[0].icon, "text-8xl")}
-                    <span className="text-7xl md:text8xl font-bold text-blue-600 leading-none ml-4">
-                        {Math.round(temperature)}{unit}
-                    </span>
                 </div>
+                <span className={styles.temperature}>
+                    {Math.round(temperature)}{unit}
+                </span>
             </div>
-            <div className="text-left md:text-right">
-                <p className="text-3xl font-semibold text-gray-700 captitalize">{weather.weather[0].description}</p>
-                <p className="text-lg text-gray-500 mt-1">Cảm giác như: {Math.round(feelsLike)}{unit}</p>
+            <div className={styles.weatherDescription}>
+                <p className={styles.description}>{weather.weather[0].description}</p>
+                <p className={styles.feelsLike}>Cảm giác như: {Math.round(feelsLike)}{unit}</p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-8 text-gray-700">
-                <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg shadow-sm">
-                    <HumidityIcon />
-                    <span className="font-bold text-lg">{weather.main.humidity}%</span>
-                    <span className="text-sm text-gray-500">Độ ẩm</span>
+            <div className={styles.weatherDetails}>
+                <div className={styles.detailItem}>
+                    <HumidityIcon className={styles.detailIcon} />
+                    <span className={styles.detailValue}>{weather.main.humidity}%</span>
+                    <span className={styles.detailLabel}>Độ ẩm</span>
                 </div>
-                <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg shadow-sm">
-                    <WindIcon />
-                    <span className="font-bold text-lg">{Math.round(weather.wind.speed * 3.6)} km/h</span>
-                    <span className="text-sm text-gray-500">Tốc độ gió</span>
+                <div className={styles.detailItem}>
+                    <WindIcon className={styles.detailIcon} />
+                    <span className={styles.detailValue}>{Math.round(weather.wind.speed * 3.6)} km/h</span>
+                    <span className={styles.detailLabel}>Tốc độ gió</span>
                 </div>
-                 <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg shadow-sm">
-                    <PresureIcon />
-                    <span className="font-bold text-lg">{weather.main.pressure} hPa</span>
-                    <span className="text-sm text-gray-500"> Áp suất</span>
+                 <div className={styles.detailItem}>
+                    <PresureIcon className={styles.detailIcon} />
+                    <span className={styles.detailValue}>{weather.main.pressure} hPa</span>
+                    <span className={styles.detailLabel}>Áp suất</span>
                 </div>
-                <div className="flex flex-col items-center bg-blue-50 p-4 rounded-lg shadow-sm">
-                    <FaEye className="text-3xl text-blue-500" />
-                    <span className="font-bold text-lg">{weather.visibility / 1000} km</span>
-                    <span className="text-sm text-gray-500">Tầm nhìn</span>
+                <div className={styles.detailItem}>
+                    <FaEye className={styles.detailIcon} />
+                    <span className={styles.detailValue}>{weather.visibility / 1000} km</span>
+                    <span className={styles.detailLabel}>Tầm nhìn</span>
                 </div>
             </div>
         </div>
