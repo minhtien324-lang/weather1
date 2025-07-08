@@ -1,6 +1,8 @@
 import React, {useRef, useState, useEffect} from "react";
 import {FaSearch , FaTimes} from "react-icons/fa";
 import {fetchGeoCoordinates} from "../api/weatherApi";
+import styles from "../styles/SearchBar.module.css";
+
 function SearchBar({ onSearch }) {
     const [location, setLocation] = useState('');
     const [suggestions, setSuggestions] = useState([]);
@@ -76,46 +78,43 @@ function SearchBar({ onSearch }) {
         searchRef.current.focus();
     };
     return (
-        <div className="relative w-full" ref={searchRef}>
-          <div className="flex items-center border border-gray-300 rounded-full px-4 py-2 shadow-sm 
-          forcus-within:ring-2 forcus-within:ring-blue-300 
-          forcus-winthin:border-blue-500 transition-all duration-200">
-            <FaSearch className="text-gray-500 mr-3" />
+        <div className={styles.container} ref={searchRef}>
+          <div className={styles.searchBox}>
+            <FaSearch className={styles.searchIcon} />
             <input
                 type="text"
                 value={location}
                 onChange={handleInputChange}
                 onKeyDown={handleKeyPress}
                 placeholder="Nhập tên thành phố..."
-                className="flex-grow outline-none text-gray-700 bg-transparent" 
+                className={styles.input} 
                 />
             {location && (
                 <button
                     onClick={handleClearClick }
-                    className="text-gray-500 hover:text-gray-700 transition-colors duration-200"
+                    className={styles.clearButton}
                 >
                     <FaTimes className="w-5 h-5" />
                 </button>
             )}
             <button 
-            onClick={handleClearClick}
-            className="ml-4 px6 py-2 bg-blue-600 text-white rounded-full 
-            hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            onClick={handleSearchClick}
+            className={styles.searchButton}
             >
                 Tìm kiếm
             </button>
           </div>
           {loadingSuggestions &&(
-            <div className="absolute z-10 w-full bg-white border border-gray-200 rounded-lg shadow-lg mt-2 py-2 text-center text-gray-500">
+            <div className={styles.loadingSuggestions}>
                 Đang tải gợi ý...
             </div>
           )}
           {!loadingSuggestions && suggestions.length > 0 && (
-            <ul className="absolute z-10 w-full bg-white bg-white border border-gray-200 rounded-lg shadow-lg mt-2 py-1 max-h-60 overflow-y-auto"> 
+            <ul className={styles.suggestionsList}> 
                 {suggestions.map((s, index) => (
                  <li 
                     key={index}
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-gray-800"
+                    className={styles.suggestionItem}
                     onClick={() => handleSuggestionsClick(s)}
                  >
                   {`${s.name}${s.state ? ', ' + s.state : ''}, ${s.country}`}     
