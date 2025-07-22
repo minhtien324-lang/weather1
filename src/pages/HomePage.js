@@ -4,6 +4,7 @@ import SearchBar from "../components/SearchBar";
 import CurrentWeather from '../components/CurrentWeather';
 import Hours from '../components/Hours';
 import DailyWeather from '../components/DailyWeather';
+import Chatbot from '../components/Chatbot';
 import styles from "../styles/HomePage.module.css";
 
 function HomePage({ onNavigate }) {
@@ -13,6 +14,10 @@ function HomePage({ onNavigate }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isCelsius, setIsCelsius] = useState(true);
+    const [chatMessages, setChatMessages] = useState([
+        { sender: 'bot', text: 'Xin chào! Tôi có thể giúp gì cho bạn về thời tiết hôm nay?' }
+    ]);
+    const [chatLoading, setChatLoading] = useState(false);
 
     const loadWeatherData = async (lat, lon, cityNameForCurrent) => {
         setLoading(true);
@@ -83,6 +88,65 @@ function HomePage({ onNavigate }) {
             setError("Không tìm thấy vị trí. Vui lòng kiểm tra lại.");
             setLoading(false);
         }
+    };
+
+    // Hàm xử lý tin nhắn chatbot
+    const handleChatMessage = async (userInput) => {
+        setChatMessages(prev => [...prev, { sender: 'user', text: userInput }]);
+        setChatLoading(true);
+        // Xử lý ý định đơn giản: hỏi thời tiết ở đâu đó hoặc tìm kiếm nhanh
+        let matched = userInput.match(/(thời tiết|nhiệt độ|trời|mưa|nắng|bao nhiêu|weather|temperature).*?ở\s*(.+)/i);
+        let city = null;
+        if (matched && matched[2]) {
+            city = matched[2].trim();
+            // Loại bỏ các từ dư thừa ở cuối
+            city = city.replace(/(thế nào|bao nhiêu|không|\?|\.|,|!|\s|như thế nào)+$/gi, '').trim();
+        } else if (/hà nội|hn/i.test(userInput)) {
+            city = 'Hà Nội';
+        } else if (/hồ chí minh|hcm|sài gòn/i.test(userInput)) {
+            city = 'Hồ Chí Minh';
+        }
+        if (city) {
+            try {
+                const geoData = await fetchGeoCoordinates(city);
+                if (geoData && geoData.length > 0) {
+                    const lat = geoData[0].lat;
+                    const lon = geoData[0].lon;
+                    const cityName = geoData[0].name;
+                    const currentData = await fetchCurrentWeatherSimple(cityName);
+                    setChatMessages(prev => [
+                        ...prev,
+                        { sender: 'bot', text: `Thời tiết hiện tại ở ${cityName}: ${currentData.weather[0].description}, nhiệt độ ${Math.round(currentData.main.temp)}°${isCelsius ? 'C' : 'F'}.` }
+                    ]);
+                } else {
+                    setChatMessages(prev => [
+                        ...prev,
+                        { sender: 'bot', text: `Xin lỗi, tôi không tìm thấy thông tin thời tiết cho địa điểm "${city}".` }
+                    ]);
+                }
+            } catch (err) {
+                setChatMessages(prev => [
+                    ...prev,
+                    { sender: 'bot', text: 'Xin lỗi, tôi gặp lỗi khi lấy dữ liệu thời tiết. Vui lòng thử lại sau.' }
+                ]);
+            }
+        } else if (/chào|hello|hi|xin chào/i.test(userInput)) {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'Chào bạn! Bạn muốn hỏi về thời tiết ở đâu?' }
+            ]);
+        } else if (/cảm ơn|thank/i.test(userInput)) {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'Rất vui được giúp bạn!' }
+            ]);
+        } else {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'Bạn có thể hỏi tôi về thời tiết ở một thành phố bất kỳ. Ví dụ: "Thời tiết ở Đà Nẵng thế nào?"' }
+            ]);
+        }
+        setChatLoading(false);
     };
 
     useEffect(() => {
@@ -159,6 +223,10 @@ function HomePage({ onNavigate }) {
                     </button>
                 </div>
             </div>
+            <Chatbot
+                onSendMessage={handleChatMessage}
+                messages={chatMessages}
+            />
         </div>
     );
 }
