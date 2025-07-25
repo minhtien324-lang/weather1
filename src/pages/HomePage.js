@@ -114,9 +114,33 @@ function HomePage({ onNavigate }) {
                     const lon = geoData[0].lon;
                     const cityName = geoData[0].name;
                     const currentData = await fetchCurrentWeatherSimple(cityName);
+                    // Gợi ý trang phục
+                    let tempC = currentData.main.temp;
+                    let weatherDesc = currentData.weather[0].description.toLowerCase();
+                    let outfit = '';
+                    if (weatherDesc.includes('mưa')) {
+                        outfit = 'Bạn nhớ mang theo ô hoặc áo mưa.';
+                    } else if (tempC < 18) {
+                        outfit = 'Trời lạnh, bạn nên mặc áo ấm, khoác ngoài.';
+                    } else if (tempC < 25) {
+                        outfit = 'Thời tiết mát mẻ, bạn có thể mặc đồ bình thường.';
+                    } else if (tempC >= 30) {
+                        outfit = 'Trời nóng, bạn nên mặc đồ mát, đội mũ và bôi kem chống nắng.';
+                    } else {
+                        outfit = 'Bạn có thể mặc đồ thoải mái.';
+                    }
+                    // Cảnh báo thời tiết
+                    let warning = '';
+                    if (weatherDesc.includes('bão') || weatherDesc.includes('giông') || weatherDesc.includes('mưa lớn')) {
+                        warning = 'Cảnh báo: Thời tiết xấu, bạn nên hạn chế ra ngoài!';
+                    } else if (tempC < 15) {
+                        warning = 'Cảnh báo: Rét đậm, chú ý giữ ấm!';
+                    } else if (tempC > 37) {
+                        warning = 'Cảnh báo: Nắng nóng gay gắt, hạn chế ra ngoài vào buổi trưa!';
+                    }
                     setChatMessages(prev => [
                         ...prev,
-                        { sender: 'bot', text: `Thời tiết hiện tại ở ${cityName}: ${currentData.weather[0].description}, nhiệt độ ${Math.round(currentData.main.temp)}°${isCelsius ? 'C' : 'F'}.` }
+                        { sender: 'bot', text: `Thời tiết hiện tại ở ${cityName}: ${currentData.weather[0].description}, nhiệt độ ${Math.round(currentData.main.temp)}°${isCelsius ? 'C' : 'F'}.\n${outfit}${warning ? `\n${warning}` : ''}` }
                     ]);
                 } else {
                     setChatMessages(prev => [
