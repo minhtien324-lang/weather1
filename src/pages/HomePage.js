@@ -164,10 +164,40 @@ function HomePage({ onNavigate }) {
                 ...prev,
                 { sender: 'bot', text: 'Rất vui được giúp bạn!' }
             ]);
+        } else if (/uv|tia cực tím|chỉ số uv/i.test(userInput)) {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'UV (tia cực tím) là bức xạ từ mặt trời. Chỉ số UV cao có thể gây hại cho da và mắt. UV 0-2: thấp, 3-5: trung bình, 6-7: cao, 8-10: rất cao, 11+: cực cao. Bạn nên bôi kem chống nắng khi UV > 3.' }
+            ]);
+        } else if (/độ ẩm|humidity/i.test(userInput)) {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'Độ ẩm là lượng hơi nước trong không khí. Độ ẩm 30-50%: thoải mái, 50-70%: ẩm, >70%: rất ẩm (có thể gây khó chịu). Độ ẩm thấp (<30%) có thể gây khô da.' }
+            ]);
+        } else if (/áp suất|pressure/i.test(userInput)) {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'Áp suất khí quyển là lực của không khí tác động lên bề mặt. Áp suất cao thường mang thời tiết đẹp, áp suất thấp thường mang mưa, bão. Đơn vị đo là hPa (hectopascal).' }
+            ]);
+        } else if (/chỉ số chất lượng không khí|aqi|air quality/i.test(userInput)) {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'Chỉ số chất lượng không khí (AQI) đo mức độ ô nhiễm. 0-50: tốt, 51-100: trung bình, 101-150: không tốt cho nhóm nhạy cảm, 151-200: không tốt, 201-300: rất không tốt, >300: nguy hiểm.' }
+            ]);
+        } else if (/gió mùa|monsoon/i.test(userInput)) {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'Gió mùa là hiện tượng gió thay đổi hướng theo mùa. Ở Việt Nam có gió mùa đông bắc (lạnh, khô) và gió mùa tây nam (nóng, ẩm, mưa). Gió mùa ảnh hưởng lớn đến thời tiết và nông nghiệp.' }
+            ]);
+        } else if (/el nino|la nina/i.test(userInput)) {
+            setChatMessages(prev => [
+                ...prev,
+                { sender: 'bot', text: 'El Nino và La Nina là hiện tượng khí hậu ở Thái Bình Dương. El Nino: nước biển ấm hơn bình thường, thường gây hạn hán. La Nina: nước biển lạnh hơn, thường gây mưa nhiều và lũ lụt.' }
+            ]);
         } else {
             setChatMessages(prev => [
                 ...prev,
-                { sender: 'bot', text: 'Bạn có thể hỏi tôi về thời tiết ở một thành phố bất kỳ. Ví dụ: "Thời tiết ở Đà Nẵng thế nào?"' }
+                { sender: 'bot', text: 'Bạn có thể hỏi tôi về thời tiết ở một thành phố bất kỳ hoặc các thuật ngữ thời tiết như UV, độ ẩm, áp suất, chỉ số chất lượng không khí, gió mùa, El Nino/La Nina.' }
             ]);
         }
         setChatLoading(false);
