@@ -94,18 +94,36 @@ function HomePage({ onNavigate }) {
     const handleChatMessage = async (userInput) => {
         setChatMessages(prev => [...prev, { sender: 'user', text: userInput }]);
         setChatLoading(true);
-        // Xử lý ý định đơn giản: hỏi thời tiết ở đâu đó hoặc tìm kiếm nhanh
-        let matched = userInput.match(/(thời tiết|nhiệt độ|trời|mưa|nắng|bao nhiêu|weather|temperature).*?ở\s*(.+)/i);
+        
+        // Tìm kiếm nhanh - chỉ cần nhắn tên thành phố
         let city = null;
-        if (matched && matched[2]) {
-            city = matched[2].trim();
-            // Loại bỏ các từ dư thừa ở cuối
-            city = city.replace(/(thế nào|bao nhiêu|không|\?|\.|,|!|\s|như thế nào)+$/gi, '').trim();
-        } else if (/hà nội|hn/i.test(userInput)) {
-            city = 'Hà Nội';
-        } else if (/hồ chí minh|hcm|sài gòn/i.test(userInput)) {
-            city = 'Hồ Chí Minh';
+        let isQuickSearch = false;
+        
+        // Kiểm tra xem có phải chỉ là tên thành phố không
+        const cityOnlyPattern = /^[a-zA-ZÀ-ỹ\s]+$/;
+        if (cityOnlyPattern.test(userInput.trim()) && userInput.trim().length > 1) {
+            // Loại bỏ các từ không phải tên thành phố
+            const cleanInput = userInput.trim().toLowerCase();
+            if (!/^(thời tiết|nhiệt độ|trời|mưa|nắng|bao nhiêu|weather|temperature|chào|hello|hi|xin chào|cảm ơn|thank|uv|độ ẩm|áp suất|chỉ số|gió mùa|el nino|la nina)/.test(cleanInput)) {
+                city = userInput.trim();
+                isQuickSearch = true;
+            }
         }
+        
+        // Xử lý ý định đơn giản: hỏi thời tiết ở đâu đó
+        if (!city) {
+            let matched = userInput.match(/(thời tiết|nhiệt độ|trời|mưa|nắng|bao nhiêu|weather|temperature).*?ở\s*(.+)/i);
+            if (matched && matched[2]) {
+                city = matched[2].trim();
+                // Loại bỏ các từ dư thừa ở cuối
+                city = city.replace(/(thế nào|bao nhiêu|không|\?|\.|,|!|\s)+$/gi, '').trim();
+            } else if (/hà nội|hn/i.test(userInput)) {
+                city = 'Hà Nội';
+            } else if (/hồ chí minh|hcm|sài gòn/i.test(userInput)) {
+                city = 'Hồ Chí Minh';
+            }
+        }
+        
         if (city) {
             try {
                 const geoData = await fetchGeoCoordinates(city);
@@ -138,9 +156,15 @@ function HomePage({ onNavigate }) {
                     } else if (tempC > 37) {
                         warning = 'Cảnh báo: Nắng nóng gay gắt, hạn chế ra ngoài vào buổi trưa!';
                     }
+                    
+                    let responseText = `Thời tiết hiện tại ở ${cityName}: ${currentData.weather[0].description}, nhiệt độ ${Math.round(currentData.main.temp)}°${isCelsius ? 'C' : 'F'}.\n${outfit}`;
+                    if (warning) {
+                        responseText += `\n${warning}`;
+                    }
+                    
                     setChatMessages(prev => [
                         ...prev,
-                        { sender: 'bot', text: `Thời tiết hiện tại ở ${cityName}: ${currentData.weather[0].description}, nhiệt độ ${Math.round(currentData.main.temp)}°${isCelsius ? 'C' : 'F'}.\n${outfit}${warning ? `\n${warning}` : ''}` }
+                        { sender: 'bot', text: responseText }
                     ]);
                 } else {
                     setChatMessages(prev => [
