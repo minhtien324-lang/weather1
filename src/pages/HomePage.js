@@ -1,34 +1,37 @@
 import React, { useEffect, useState } from 'react';
-import { fetchGeoCoordinates, fetchFiveDayForecast, fetchCurrentWeatherSimple } from "../api/weatherApi";
+import { fetchGeoCoordinates, fetchFiveDayForecast, fetchCurrentWeather } from "../api/weatherApi";
 import SearchBar from "../components/SearchBar";
 import CurrentWeather from '../components/CurrentWeather';
 import Hours from '../components/Hours';
 import DailyWeather from '../components/DailyWeather';
 import Chatbot from '../components/Chatbot';
+import { useWeather } from '../context/WeatherContext';
 import styles from "../styles/HomePage.module.css";
 
 function HomePage({ onNavigate }) {
     const [currentWeather, setCurrentWeather] = useState(null);
-    const [hours, setHours] = useState([]);
-    const [dailyWeather, setDailyWeather] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [hourlyForecast, setHourlyForecast] = useState([]);
+    const [dailyForecast, setDailyForecast] = useState([]);
     const [error, setError] = useState(null);
     const [isCelsius, setIsCelsius] = useState(true);
     const [chatMessages, setChatMessages] = useState([
         { sender: 'bot', text: 'Xin chào! Tôi có thể giúp gì cho bạn về thời tiết hôm nay?' }
     ]);
     const [chatLoading, setChatLoading] = useState(false);
+    
+    const { updateWeatherBackground } = useWeather();
 
     const loadWeatherData = async (lat, lon, cityNameForCurrent) => {
-        setLoading(true);
-        setError(null);
         try {
-            const currentData = await fetchCurrentWeatherSimple(cityNameForCurrent);
+            const currentData = await fetchCurrentWeather(lat, lon);
             setCurrentWeather(currentData);
+            
+            // Cập nhật background toàn cục dựa trên thời tiết
+            updateWeatherBackground(currentData);
 
             const fiveDayForecastData = await fetchFiveDayForecast(lat, lon);
-            setHours(fiveDayForecastData.list.slice(0, 8));
-
+            
+            // Xử lý dữ liệu dự báo theo ngày
             const dailyMap = new Map();
             fiveDayForecastData.list.forEach(item => {
                 const date = new Date(item.dt * 1000);
@@ -49,20 +52,19 @@ function HomePage({ onNavigate }) {
                 }
             });
             const processedDailyData = Array.from(dailyMap.values()).sort((a, b) => a.dt - b.dt);
-            setDailyWeather(processedDailyData.slice(0, 7));
+            setDailyForecast(processedDailyData.slice(0, 7));
+
+            // Xử lý dữ liệu dự báo theo giờ
+            setHourlyForecast(fiveDayForecastData.list.slice(0, 24));
+
+            setError(null);
         } catch (err) {
-            console.error("Lỗi khi tải dữ liệu thời tiết: ", err);
-            setError(`Không thể tải dữ liệu thời tiết cho ${cityNameForCurrent}. Vui lòng thử lại sau.`);
-            setCurrentWeather(null);
-            setHours([]);
-            setDailyWeather([]);
-        } finally {
-            setLoading(false);
+            console.error('Error loading weather data:', err);
+            setError('Không thể tải dữ liệu thời tiết. Vui lòng thử lại.');
         }
     };
 
     const handleSearch = async (locationInput) => {
-        setLoading(true);
         setError(null);
         try {
             let lat, lon, cityName;
@@ -78,7 +80,6 @@ function HomePage({ onNavigate }) {
                     cityName = geoData[0].name;
                 } else {
                     setError("Không tìm thấy vị trí. Vui lòng kiểm tra lại.");
-                    setLoading(false);
                     return;
                 }
             }
@@ -86,7 +87,6 @@ function HomePage({ onNavigate }) {
         } catch (err) {
             console.error("Lỗi khi tìm kiếm vị trí: ", err);
             setError("Không tìm thấy vị trí. Vui lòng kiểm tra lại.");
-            setLoading(false);
         }
     };
 
@@ -131,7 +131,11 @@ function HomePage({ onNavigate }) {
                     const lat = geoData[0].lat;
                     const lon = geoData[0].lon;
                     const cityName = geoData[0].name;
-                    const currentData = await fetchCurrentWeatherSimple(cityName);
+                    const currentData = await fetchCurrentWeather(lat, lon);
+                    
+                    // Cập nhật background toàn cục dựa trên thời tiết của thành phố được hỏi
+                    updateWeatherBackground(currentData);
+                    
                     // Gợi ý trang phục
                     let tempC = currentData.main.temp;
                     let weatherDesc = currentData.weather[0].description.toLowerCase();
@@ -239,67 +243,40 @@ function HomePage({ onNavigate }) {
         <div className={styles.container}>
             <div className={styles.mainContent}>
                 <header className={styles.header}>
-                    <h1 className={styles.title}>Ứng Dụng Thời Tiết</h1>
-                    <p className={styles.subtitle}>Xem thời tiết hiện tại và dự báo</p>
+                    <h1 className={styles.title}>Weather App</h1>
+                    <button 
+                        className={styles.tempToggle}
+                        onClick={() => setIsCelsius(!isCelsius)}
+                    >
+                        °{isCelsius ? 'F' : 'C'}
+                    </button>
                 </header>
 
-                <main className={styles.main}>
-                    <SearchBar onSearch={handleSearch} />
+                <SearchBar onSearch={handleSearch} />
 
-                    {loading && (
-                        <div className={styles.loadingContainer}>
-                            <svg className={styles.loadingSpinner} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <p className={styles.loadingText}>Đang tải dữ liệu thời tiết...</p>
-                        </div>
-                    )}
+                {error && (
+                    <div className={styles.error}>
+                        {error}
+                    </div>
+                )}
 
-                    {error && (
-                        <div className={styles.errorContainer} role="alert">
-                            <strong className={styles.errorText}>Lỗi!</strong>
-                            <span className={styles.errorMessage}>{error}</span>
-                        </div>
-                    )}
-
-                    {!loading && !error && currentWeather && (
-                        <>
-                            <CurrentWeather
-                                weather={currentWeather}
-                                onToggleUnit={toggleUnit}
-                                isCelsius={isCelsius}
-                            />
-                            {hours.length > 0 && (
-                                <Hours
-                                    hourlyData={hours}
-                                    isCelsius={isCelsius}
-                                />
-                            )}
-                            {dailyWeather.length > 0 && (
-                                <DailyWeather
-                                    dailyData={dailyWeather}
-                                    isCelsius={isCelsius}
-                                />
-                            )}
-                        </>
-                    )}
-                </main>
-
-                <div className={styles.navigation}>
-                    <button 
-                        className={styles.navButton} 
-                        onClick={() => onNavigate('search')}
-                    >
-                        Tìm Kiếm Mới
-                    </button>
-                    <button 
-                        className={styles.navButton} 
-                        onClick={() => onNavigate('forecast')}
-                    >
-                        Xem Dự Báo Chi Tiết
-                    </button>
-                </div>
+                {currentWeather && (
+                    <>
+                        <CurrentWeather 
+                            weather={currentWeather} 
+                            isCelsius={isCelsius}
+                            onNavigate={onNavigate}
+                        />
+                        <Hours 
+                            hourlyData={hourlyForecast} 
+                            isCelsius={isCelsius}
+                        />
+                        <DailyWeather 
+                            dailyData={dailyForecast} 
+                            isCelsius={isCelsius}
+                        />
+                    </>
+                )}
             </div>
             <Chatbot
                 onSendMessage={handleChatMessage}

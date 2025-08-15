@@ -1,41 +1,30 @@
 import React, { useState } from 'react';
-import "./styles/index.css"
 import HomePage from './pages/HomePage';
-import ForecastPage from './pages/ForecastPage';
-import SearchPage from './pages/SearchPage';
-import BackendStatus from './components/BackendStatus';
+import { WeatherProvider, useWeather } from './context/WeatherContext';
+import styles from './styles/GlobalWeather.module.css';
 
-function App() {
+function AppContent() {
     const [currentPage, setCurrentPage] = useState('home');
-    const [searchCallback, setSearchCallback] = useState(null);
+    const { weatherClass } = useWeather();
 
-    const handleNavigate = (page) => {
+    const navigateTo = (page) => {
         setCurrentPage(page);
     };
 
-    const handleSearchFromPage = (locationInput) => {
-        // Lưu callback để SearchPage có thể gọi lại
-        setSearchCallback(() => () => locationInput);
-    };
-
-    const renderPage = () => {
-        switch (currentPage) {
-            case 'home':
-                return <HomePage onNavigate={handleNavigate} />;
-            case 'forecast':
-                return <ForecastPage onNavigate={handleNavigate} />;
-            case 'search':
-                return <SearchPage onNavigate={handleNavigate} onSearch={handleSearchFromPage} />;
-            default:
-                return <HomePage onNavigate={handleNavigate} />;
-        }
-    };
-
     return (
-        <div className="App">
-            <BackendStatus />
-            {renderPage()}
+        <div className={`${styles.appContainer} ${weatherClass ? styles[weatherClass] : ''}`}>
+            <div className={styles.content}>
+                {currentPage === 'home' && <HomePage onNavigate={navigateTo} />}
+            </div>
         </div>
+    );
+}
+
+function App() {
+    return (
+        <WeatherProvider>
+            <AppContent />
+        </WeatherProvider>
     );
 }
 

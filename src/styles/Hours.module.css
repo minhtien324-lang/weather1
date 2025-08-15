@@ -1,9 +1,12 @@
 /* Hours.module.css */
 .container {
-  background-color: white;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   padding: 1.5rem;
   border-radius: 0.75rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  margin: 1rem 0;
 }
 
 .title {
@@ -30,7 +33,9 @@
   width: 7rem;
   padding: 0.75rem;
   text-align: center;
-  background-color: #eff6ff;
+  background: rgba(239, 246, 255, 0.8);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   border-radius: 0.5rem;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   margin: 0 0.375rem;
@@ -39,12 +44,14 @@
   align-items: center;
   justify-content: center;
   border: 1px solid transparent;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
   cursor: pointer;
 }
 
 .hourItem:hover {
   border-color: #3b82f6;
+  background: rgba(239, 246, 255, 0.95);
+  transform: translateY(-2px);
 }
 
 .time {

@@ -1,0 +1,193 @@
+/* Global Weather Background Styles */
+.appContainer {
+    min-height: 100vh;
+    transition: background 0.5s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Background mặc định */
+.appContainer {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Background cho thời tiết nắng */
+.appContainer.sunny {
+    background: linear-gradient(135deg, #f7f599 0%, #fcceed 50%, #fecfef 100%);
+}
+
+.appContainer.sunny::before {
+    content: '';
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, #ffeb3b 0%, #ffc107 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 30px rgba(255, 235, 59, 0.6);
+    animation: sunRotate 20s linear infinite;
+    z-index: 1;
+}
+
+@keyframes sunRotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Background cho thời tiết mưa */
+.appContainer.rainy {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 50%, #7f8c8d 100%);
+}
+
+.appContainer.rainy::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="rain" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><line x1="10" y1="0" x2="10" y2="20" stroke="%23ffffff" stroke-width="1" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23rain)"/></svg>');
+    animation: rain 0.5s linear infinite;
+    z-index: 1;
+}
+
+@keyframes rain {
+    0% { transform: translateY(-100px); }
+    100% { transform: translateY(100vh); }
+}
+
+/* Background cho thời tiết mây */
+.appContainer.cloudy {
+    background: linear-gradient(135deg, #bdc3c7 0%, #95a5a6 50%, #7f8c8d 100%);
+}
+
+.appContainer.cloudy::before {
+    content: '';
+    position: fixed;
+    top: 80px;
+    right: 80px;
+    width: 100px;
+    height: 40px;
+    background: #ecf0f1;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(236, 240, 241, 0.8);
+    animation: cloudFloat 8s ease-in-out infinite;
+    z-index: 1;
+}
+
+.appContainer.cloudy::after {
+    content: '';
+    position: fixed;
+    top: 120px;
+    right: 120px;
+    width: 80px;
+    height: 30px;
+    background: #ecf0f1;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(236, 240, 241, 0.6);
+    animation: cloudFloat 8s ease-in-out infinite 2s;
+    z-index: 1;
+}
+
+@keyframes cloudFloat {
+    0%, 100% { transform: translateX(0px); }
+    50% { transform: translateX(-20px); }
+}
+
+/* Background cho thời tiết tuyết */
+.appContainer.snowy {
+    background: linear-gradient(135deg, #e8f4fd 0%, #d1e7dd 50%, #cfe2ff 100%);
+}
+
+.appContainer.snowy::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="snow" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23ffffff" opacity="0.8"/></pattern></defs><rect width="100" height="100" fill="url(%23snow)"/></svg>');
+    animation: snow 3s linear infinite;
+    z-index: 1;
+}
+
+@keyframes snow {
+    0% { transform: translateY(-100px); }
+    100% { transform: translateY(100vh); }
+}
+
+/* Background cho thời tiết sương mù */
+.appContainer.foggy {
+    background: linear-gradient(135deg, #d5d5d5 0%, #b8b8b8 50%, #a0a0a0 100%);
+}
+
+.appContainer.foggy::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%);
+    animation: fog 4s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes fog {
+    0%, 100% { opacity: 0.3; transform: translateX(-100%); }
+    50% { opacity: 0.6; transform: translateX(100%); }
+}
+
+/* Background cho thời tiết bão */
+.appContainer.stormy {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2c3e50 50%, #34495e 100%);
+}
+
+.appContainer.stormy::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%);
+    animation: lightning 2s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes lightning {
+    0%, 90%, 100% { opacity: 0; }
+    95% { opacity: 1; }
+}
+
+/* Background cho thời tiết đêm */
+.appContainer.night {
+    background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+}
+
+.appContainer.night::before {
+    content: '';
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #ffffff 0%, #f0f0f0 100%);
+    border-radius: 50%;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+    animation: moonGlow 4s ease-in-out infinite;
+    z-index: 1;
+}
+
+@keyframes moonGlow {
+    0%, 100% { opacity: 0.8; }
+    50% { opacity: 1; }
+}
+
+/* Đảm bảo nội dung hiển thị trên background */
+.content {
+    position: relative;
+    z-index: 2;
+}
+
