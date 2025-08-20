@@ -5,6 +5,8 @@ import CurrentWeather from '../components/CurrentWeather';
 import Hours from '../components/Hours';
 import DailyWeather from '../components/DailyWeather';
 import Chatbot from '../components/Chatbot';
+import UserProfile from '../components/UserProfile';
+import LoginButton from '../components/LoginButton';
 import { useWeather } from '../context/WeatherContext';
 import styles from "../styles/HomePage.module.css";
 
@@ -18,6 +20,7 @@ function HomePage({ onNavigate }) {
         { sender: 'bot', text: 'Xin chào! Tôi có thể giúp gì cho bạn về thời tiết hôm nay?' }
     ]);
     const [chatLoading, setChatLoading] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     
     const { updateWeatherBackground } = useWeather();
 
@@ -97,6 +100,7 @@ function HomePage({ onNavigate }) {
         
         // Tìm kiếm nhanh - chỉ cần nhắn tên thành phố
         let city = null;
+        // eslint-disable-next-line no-unused-vars
         let isQuickSearch = false;
         
         // Kiểm tra xem có phải chỉ là tên thành phố không
@@ -233,8 +237,10 @@ function HomePage({ onNavigate }) {
 
     useEffect(() => {
         handleSearch("Ha Noi"); // Mặc định tìm kiếm Hà Nội khi ứng dụng khởi động
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+    // eslint-disable-next-line no-unused-vars
     const toggleUnit = () => {
         setIsCelsius(prev => !prev);
     };
@@ -244,12 +250,16 @@ function HomePage({ onNavigate }) {
             <div className={styles.mainContent}>
                 <header className={styles.header}>
                     <h1 className={styles.title}>Weather App</h1>
-                    <button 
-                        className={styles.tempToggle}
-                        onClick={() => setIsCelsius(!isCelsius)}
-                    >
-                        °{isCelsius ? 'F' : 'C'}
-                    </button>
+                    <div className={styles.headerControls}>
+                        <button 
+                            className={styles.tempToggle}
+                            onClick={() => setIsCelsius(!isCelsius)}
+                        >
+                            °{isCelsius ? 'F' : 'C'}
+                        </button>
+                        <UserProfile />
+                        <LoginButton />
+                    </div>
                 </header>
 
                 <SearchBar onSearch={handleSearch} />

@@ -20,6 +20,12 @@
     margin-bottom: 20px;
 }
 
+.headerControls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
 .title {
     font-size: 2rem;
     font-weight: bold;
