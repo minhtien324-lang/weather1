@@ -28,7 +28,11 @@ function AppContent() {
     return (
         <div className={`${styles.appContainer} ${weatherClass ? styles[weatherClass] : ''}`}>
             <div className={styles.content}>
-                {currentPage === 'home' && <HomePage onNavigate={navigateTo} />}
+                {!user ? (
+                    <AuthPage onClose={() => navigateTo('home')} />
+                ) : (
+                    currentPage === 'home' && <HomePage onNavigate={navigateTo} />
+                )}
             </div>
         </div>
     );

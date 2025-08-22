@@ -22,18 +22,22 @@ const Register = ({ onSwitchToLogin, onClose }) => {
             return;
         }
 
-        const result = register(name, email, password, confirmPassword);
-        
-        if (result.success) {
-            // Đăng ký thành công - đóng modal
-            if (onClose) {
-                onClose();
+        try {
+            const result = await register(name, email, password, confirmPassword);
+            
+            if (result.success) {
+                // Đăng ký thành công - đóng modal
+                if (onClose) {
+                    onClose();
+                }
+            } else {
+                setError(result.message);
             }
-        } else {
-            setError(result.message);
+        } catch (error) {
+            setError('Có lỗi xảy ra khi đăng ký');
+        } finally {
+            setLoading(false);
         }
-        
-        setLoading(false);
     };
 
     return (

@@ -20,18 +20,22 @@ const Login = ({ onSwitchToRegister, onClose }) => {
             return;
         }
 
-        const result = login(email, password);
-        
-        if (result.success) {
-            // Đăng nhập thành công - đóng modal
-            if (onClose) {
-                onClose();
+        try {
+            const result = await login(email, password);
+            
+            if (result.success) {
+                // Đăng nhập thành công - đóng modal
+                if (onClose) {
+                    onClose();
+                }
+            } else {
+                setError(result.message);
             }
-        } else {
-            setError(result.message);
+        } catch (error) {
+            setError('Có lỗi xảy ra khi đăng nhập');
+        } finally {
+            setLoading(false);
         }
-        
-        setLoading(false);
     };
 
     return (

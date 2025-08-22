@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { authApiService, authUtils } from '../api/authApi';
 
 const AuthContext = createContext();
 
@@ -16,43 +17,66 @@ export const AuthProvider = ({ children }) => {
 
     // Kiểm tra xem có user đã đăng nhập trong localStorage không
     useEffect(() => {
-        const savedUser = localStorage.getItem('weatherAppUser');
-        if (savedUser) {
-            setUser(JSON.parse(savedUser));
-        }
-        setLoading(false);
+        const checkAuth = async () => {
+            try {
+                const token = authUtils.getToken();
+                if (token) {
+                    // Kiểm tra token có hợp lệ không bằng cách gọi API
+                    const userData = await authApiService.getCurrentUser();
+                    const formattedUser = {
+                        ...userData.user,
+                        name: userData.user.full_name || userData.user.name || userData.user.username || 'User'
+                    };
+                    setUser(formattedUser);
+                } else {
+                    // Fallback cho localStorage nếu không có token
+                    const savedUser = localStorage.getItem('weatherAppUser');
+                    if (savedUser) {
+                        const parsedUser = JSON.parse(savedUser);
+                        const formattedUser = {
+                            ...parsedUser,
+                            name: parsedUser.full_name || parsedUser.name || parsedUser.username || 'User'
+                        };
+                        setUser(formattedUser);
+                    }
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                // Xóa dữ liệu không hợp lệ
+                authUtils.clearAuthData();
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        checkAuth();
     }, []);
 
-    const login = (email, password) => {
-        // Kiểm tra trong mock users trước
-        const mockUsers = [
-            { id: 1, email: 'user@example.com', password: 'password123', name: 'Người dùng' },
-            { id: 2, email: 'admin@example.com', password: 'admin123', name: 'Admin' }
-        ];
-
-        let foundUser = mockUsers.find(u => u.email === email && u.password === password);
-        
-        // Nếu không tìm thấy trong mock users, kiểm tra trong users đã đăng ký
-        if (!foundUser) {
-            const registeredUsers = JSON.parse(localStorage.getItem('weatherAppUsers') || '[]');
-            foundUser = registeredUsers.find(u => u.email === email && u.password === password);
-        }
-        
-        if (foundUser) {
+    const login = async (email, password) => {
+        try {
+            const response = await authApiService.login({ email, password });
+            
+            // Đảm bảo user data có đầy đủ thông tin
             const userData = {
-                id: foundUser.id,
-                email: foundUser.email,
-                name: foundUser.name
+                ...response.user,
+                name: response.user.full_name || response.user.name || response.user.username || 'User'
             };
+            
+            // Lưu token và user data
+            authUtils.saveAuthData(response.token, userData);
             setUser(userData);
-            localStorage.setItem('weatherAppUser', JSON.stringify(userData));
+            
             return { success: true };
-        } else {
-            return { success: false, message: 'Email hoặc mật khẩu không đúng' };
+        } catch (error) {
+            console.error('Login error:', error);
+            return { 
+                success: false, 
+                message: error.error || 'Có lỗi xảy ra khi đăng nhập' 
+            };
         }
     };
 
-    const register = (name, email, password, confirmPassword) => {
+    const register = async (name, email, password, confirmPassword) => {
         // Kiểm tra mật khẩu xác nhận
         if (password !== confirmPassword) {
             return { success: false, message: 'Mật khẩu xác nhận không khớp' };
@@ -69,41 +93,48 @@ export const AuthProvider = ({ children }) => {
             return { success: false, message: 'Email không hợp lệ' };
         }
 
-        // Kiểm tra email đã tồn tại chưa
-        const existingUsers = JSON.parse(localStorage.getItem('weatherAppUsers') || '[]');
-        const emailExists = existingUsers.some(user => user.email === email);
-        if (emailExists) {
-            return { success: false, message: 'Email đã được sử dụng' };
+        try {
+            // Tạo username từ email (có thể thay đổi logic này)
+            const username = email.split('@')[0];
+            
+            const response = await authApiService.register({
+                username,
+                email,
+                password,
+                full_name: name
+            });
+            
+            // Đảm bảo user data có đầy đủ thông tin
+            const userData = {
+                ...response.user,
+                name: response.user.full_name || response.user.name || response.user.username || 'User'
+            };
+            
+            // Lưu token và user data
+            authUtils.saveAuthData(response.token, userData);
+            setUser(userData);
+            
+            return { success: true };
+        } catch (error) {
+            console.error('Register error:', error);
+            return { 
+                success: false, 
+                message: error.error || 'Có lỗi xảy ra khi đăng ký' 
+            };
         }
-
-        // Trong thực tế, bạn sẽ gọi API để đăng ký
-        // Ở đây tôi sẽ mô phỏng đăng ký thành công
-        const newUser = {
-            id: Date.now(),
-            email,
-            name,
-            password
-        };
-
-        // Lưu user mới vào localStorage (trong thực tế sẽ lưu vào database)
-        existingUsers.push(newUser);
-        localStorage.setItem('weatherAppUsers', JSON.stringify(existingUsers));
-
-        // Tự động đăng nhập sau khi đăng ký
-        const userData = {
-            id: newUser.id,
-            email: newUser.email,
-            name: newUser.name
-        };
-        setUser(userData);
-        localStorage.setItem('weatherAppUser', JSON.stringify(userData));
-
-        return { success: true };
     };
 
-    const logout = () => {
-        setUser(null);
-        localStorage.removeItem('weatherAppUser');
+    const logout = async () => {
+        try {
+            // Gọi API logout (tùy chọn)
+            await authApiService.logout();
+        } catch (error) {
+            console.error('Logout API error:', error);
+        } finally {
+            // Xóa dữ liệu local
+            authUtils.clearAuthData();
+            setUser(null);
+        }
     };
 
     const value = {
