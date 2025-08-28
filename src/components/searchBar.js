@@ -44,8 +44,11 @@ function SearchBar({ onSearch }) {
 
     const handleInputChange = (e) => {
         const value = e.target.value;
-        setLocation(value);
-        fetchSuggestionsDebounced(value);
+        // Giới hạn độ dài input để tránh spam
+        if (value.length <= 100) {
+            setLocation(value);
+            fetchSuggestionsDebounced(value);
+        }
     };
 
 

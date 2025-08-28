@@ -14,10 +14,13 @@ function DailyWeather({ dailyData, isCelsius }) {
             <h3 className={styles.title}>Dự Báo 7 Ngày Tới</h3>
             <div className={styles.daysList}>
                  {daysToDisplay.map((day, index) => {
+                    if (!day || !day.temp || !day.weather || !Array.isArray(day.weather) || day.weather.length === 0) {
+                        return null; // Bỏ qua mục không hợp lệ
+                    }
                     const date = new Date(day.dt * 1000);
                     const dayName = date.toLocaleDateString('vi-VN', { weekday: 'long' });
-                    const highTemp = isCelsius ? Math.round(day.temp.max) : Math.round((day.temp.max * 9/5) + 32);
-                    const lowTemp = isCelsius ? Math.round(day.temp.min) : Math.round((day.temp.min * 9/5) + 32);
+                    const highTemp = isCelsius ? Math.round(day.temp.max || 0) : Math.round(((day.temp.max || 0) * 9/5) + 32);
+                    const lowTemp = isCelsius ? Math.round(day.temp.min || 0) : Math.round(((day.temp.min || 0) * 9/5) + 32);
                     const unit = isCelsius ? '°C' : '°F';
 
                     return (

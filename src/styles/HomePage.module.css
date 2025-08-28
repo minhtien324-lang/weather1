@@ -98,6 +98,82 @@
   background-color: #1d4ed8;
 }
 
+/* Login Banner */
+.loginBanner {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 20px;
+  margin: 0 20px 20px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: slideDown 0.5s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.bannerContent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.bannerText {
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+}
+
+.bannerLoginBtn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.bannerLoginBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+/* Responsive cho banner */
+@media (max-width: 768px) {
+  .loginBanner {
+    margin: 0 10px 15px 10px;
+    padding: 10px 15px;
+  }
+  
+  .bannerContent {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  
+  .bannerText {
+    font-size: 13px;
+  }
+  
+  .bannerLoginBtn {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
 @keyframes spin {
   from {
     transform: rotate(0deg);

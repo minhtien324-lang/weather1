@@ -4,15 +4,16 @@ import { FaEye } from "react-icons/fa";
 import styles from "../styles/CurrentWeather.module.css";
 
 function CurrentWeather({ weather, onToggleUnit, isCelsius }) {
-    if (!weather || !weather.main) {
-        console.warn("Weather data or weather.main is missing:", weather);
+    if (!weather || !weather.main || !weather.weather || !Array.isArray(weather.weather) || weather.weather.length === 0) {
+        console.warn("Weather data is missing or invalid:", weather);
         return null; 
     }
+    
     const { temp, feels_like, humidity, pressure } = weather.main;
-    const windSpeed = weather.wind.speed;
-    const visibility = weather.visibility;
-    const description = weather.weather[0].description;
-    const iconCode = weather.weather[0].icon;
+    const windSpeed = weather.wind?.speed || 0;
+    const visibility = weather.visibility || 0;
+    const description = weather.weather[0]?.description || '';
+    const iconCode = weather.weather[0]?.icon || '01d';
 
     const temperature = isCelsius ? temp : (temp * 9/5) + 32;
     const feelsLike = isCelsius ? feels_like : (feels_like * 9/5) + 32;
@@ -20,8 +21,8 @@ function CurrentWeather({ weather, onToggleUnit, isCelsius }) {
     const date = new Date(weather.dt * 1000);
     const timeString = date.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' });
     const dateString = date.toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-    const cityName = weather.name ;
-    const countryCode = weather.sys.country;
+    const cityName = weather.name || 'Unknown City';
+    const countryCode = weather.sys?.country || '';
     return (
         <div className={styles.container}>
             <button

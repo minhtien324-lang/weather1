@@ -1,70 +1,161 @@
-# Getting Started with Create React App
+# 🌤️ Weather App với AI Chatbot Mở rộng
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Ứng dụng thời tiết thông minh với chatbot AI có thể trả lời **mọi câu hỏi**, không chỉ riêng về thời tiết!
 
-## Available Scripts
+## 🌟 Tính năng chính
 
-In the project directory, you can run:
+### 🤖 AI Chatbot Đa năng
+- **Thời tiết thông minh**: Trả lời chi tiết về thời tiết, gợi ý trang phục, cảnh báo thời tiết xấu
+- **Toán học**: Thực hiện các phép tính từ cơ bản đến phức tạp
+- **Dịch thuật**: Dịch giữa nhiều ngôn ngữ khác nhau
+- **Giáo dục**: Giải thích khái niệm, lịch sử, địa lý, văn học
+- **Công nghệ**: Thông tin về lập trình, phần mềm, internet
+- **Sức khỏe**: Thông tin dinh dưỡng, tập luyện, phòng bệnh
+- **Du lịch**: Địa điểm, văn hóa, ẩm thực, kinh nghiệm
+- **Và nhiều chủ đề khác!**
 
-### `npm start`
+### 🌤️ Thời tiết
+- **Dự báo thời tiết**: 5 ngày với chi tiết theo giờ
+- **Thời tiết hiện tại**: Nhiệt độ, độ ẩm, gió, áp suất
+- **Tìm kiếm địa điểm**: Hỗ trợ tìm kiếm toàn cầu
+- **Background động**: Thay đổi theo thời tiết
+- **Đơn vị linh hoạt**: Chuyển đổi °C/°F
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### 👤 Hệ thống người dùng
+- **Đăng ký/Đăng nhập**: Tài khoản cá nhân
+- **Lịch sử tìm kiếm**: Lưu trữ các địa điểm đã tìm
+- **Hồ sơ người dùng**: Quản lý thông tin cá nhân
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Cách sử dụng
 
-### `npm test`
+### Khởi động ứng dụng
+```bash
+# Cài đặt dependencies
+npm install
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+# Chạy ứng dụng
+npm start
+```
 
-### `npm run build`
+### Sử dụng chatbot
+1. **Hỏi thời tiết**: "Thời tiết Hà Nội", "Nhiệt độ TP.HCM"
+2. **Tính toán**: "Tính 15 + 27", "Căn bậc hai của 144"
+3. **Dịch thuật**: "Dịch 'hello world' sang tiếng Việt"
+4. **Học tập**: "Giải thích về blockchain", "DNA là gì?"
+5. **Và nhiều câu hỏi khác!**
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 🛠️ Công nghệ sử dụng
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Frontend
+- **React.js**: Framework chính
+- **CSS Modules**: Styling
+- **Context API**: State management
+- **Axios**: HTTP client
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Backend
+- **Node.js**: Runtime environment
+- **Express.js**: Web framework
+- **Google Gemini AI**: AI chatbot
+- **OpenWeatherMap API**: Dữ liệu thời tiết
 
-### `npm run eject`
+### AI Integration
+- **Gemini API**: Xử lý câu hỏi đa dạng
+- **Context Awareness**: Hiểu ngữ cảnh cuộc trò chuyện
+- **Fallback System**: Tự động chuyển sang chế độ cũ khi AI lỗi
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 📁 Cấu trúc dự án
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+src/
+├── api/                 # API services
+│   ├── authApi.js      # Authentication
+│   ├── geminiApi.js    # AI chatbot
+│   └── weatherApi.js   # Weather data
+├── components/         # React components
+│   ├── Chatbot.js     # AI chatbot
+│   ├── CurrentWeather.js
+│   ├── DailyWeather.js
+│   └── ...
+├── context/           # React Context
+│   ├── AuthContext.js
+│   └── WeatherContext.js
+├── pages/            # Page components
+├── styles/           # CSS modules
+└── utils/            # Utility functions
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🔧 Cấu hình
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Environment Variables
+Tạo file `.env` trong thư mục backend:
+```env
+WEATHER_API_KEY=your_openweathermap_api_key
+GEMINI_API_KEY=your_gemini_api_key
+JWT_SECRET=your_jwt_secret
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=your_password
+DB_NAME=weather_app
+```
 
-## Learn More
+### API Keys cần thiết
+1. **OpenWeatherMap API**: Lấy tại [openweathermap.org](https://openweathermap.org/api)
+2. **Google Gemini API**: Lấy tại [makersuite.google.com](https://makersuite.google.com/app/apikey)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 📚 Tài liệu chi tiết
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **[CHATBOT_GUIDE.md](./CHATBOT_GUIDE.md)**: Hướng dẫn sử dụng chatbot chi tiết
+- **[GEMINI_SETUP.md](./GEMINI_SETUP.md)**: Cài đặt và cấu hình AI
+- **[SETUP.md](./SETUP.md)**: Hướng dẫn setup dự án
 
-### Code Splitting
+## 🎯 Tính năng nổi bật
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+### AI Status Indicator
+- Hiển thị trạng thái kết nối AI real-time
+- Tự động phát hiện và thông báo sự cố
+- Fallback system khi AI không hoạt động
 
-### Analyzing the Bundle Size
+### Smart Context
+- AI nhớ cuộc trò chuyện trước đó
+- Hiểu sở thích và ngôn ngữ người dùng
+- Đưa ra câu trả lời phù hợp với ngữ cảnh
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Responsive Design
+- Giao diện đẹp mắt, hiện đại
+- Tương thích mọi thiết bị
+- Animation mượt mà
 
-### Making a Progressive Web App
+## 🆘 Hỗ trợ
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Lỗi thường gặp
+1. **AI không trả lời**: Kiểm tra kết nối internet và backend
+2. **Thời tiết không hiển thị**: Kiểm tra API key OpenWeatherMap
+3. **Lỗi đăng nhập**: Kiểm tra cấu hình database
 
-### Advanced Configuration
+### Liên hệ
+- Báo cáo lỗi: Tạo issue trên GitHub
+- Đề xuất tính năng: Gửi pull request
+- Hỗ trợ kỹ thuật: Kiểm tra tài liệu trong thư mục docs/
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## 📈 Roadmap
 
-### Deployment
+### Phiên bản tiếp theo
+- [ ] Voice Chat (trò chuyện bằng giọng nói)
+- [ ] Image Recognition (nhận diện hình ảnh)
+- [ ] Multi-language Support (hỗ trợ nhiều ngôn ngữ)
+- [ ] Personalization (tùy chỉnh theo sở thích)
+- [ ] Mobile App (ứng dụng di động)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+### Cải tiến AI
+- [ ] Better context understanding
+- [ ] Multi-modal responses
+- [ ] Learning from user feedback
+- [ ] Custom AI models
 
-### `npm run build` fails to minify
+---
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Lưu ý**: Đây là dự án demo, vui lòng không sử dụng cho mục đích thương mại mà không có sự cho phép.
+
+## 📄 License
+
+MIT License - xem file [LICENSE](LICENSE) để biết thêm chi tiết.

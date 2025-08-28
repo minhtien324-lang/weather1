@@ -9,7 +9,15 @@ function SearchPage({ onNavigate, onSearch }) {
     useEffect(() => {
         const saved = localStorage.getItem('recentSearches');
         if (saved) {
-            setRecentSearches(JSON.parse(saved));
+            try {
+                const parsedSearches = JSON.parse(saved);
+                if (Array.isArray(parsedSearches)) {
+                    setRecentSearches(parsedSearches);
+                }
+            } catch (parseError) {
+                console.error('Error parsing recent searches:', parseError);
+                localStorage.removeItem('recentSearches');
+            }
         }
     }, []);
 
