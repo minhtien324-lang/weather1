@@ -3,16 +3,12 @@ import { useAuth } from '../context/AuthContext';
 import AuthPage from '../pages/AuthPage';
 import styles from '../styles/LoginButton.module.css';
 
-const LoginButton = ({ onNavigate }) => {
+const LoginButton = () => {
     const { user } = useAuth();
     const [showAuthModal, setShowAuthModal] = useState(false);
 
     const handleLoginClick = () => {
-        if (onNavigate) {
-            onNavigate('auth');
-        } else {
-            setShowAuthModal(true);
-        }
+        setShowAuthModal(true);
     };
 
     const handleCloseModal = () => {

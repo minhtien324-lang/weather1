@@ -8,6 +8,7 @@ import Chatbot from '../components/Chatbot';
 import UserProfile from '../components/UserProfile';
 import LoginButton from '../components/LoginButton';
 import AiStatusIndicator from '../components/AiStatusIndicator';
+import GoogleNewsFeed from '../components/GoogleNewsFeed';
 import { useWeather } from '../context/WeatherContext';
 import { useAuth } from '../context/AuthContext';
 import styles from "../styles/HomePage.module.css";
@@ -372,21 +373,26 @@ function HomePage({ onNavigate }) {
                 )}
 
                 {currentWeather && (
-                    <>
-                        <CurrentWeather 
-                            weather={currentWeather} 
-                            isCelsius={isCelsius}
-                            onNavigate={onNavigate}
-                        />
-                        <Hours 
-                            hourlyData={hourlyForecast} 
-                            isCelsius={isCelsius}
-                        />
-                        <DailyWeather 
-                            dailyData={dailyForecast} 
-                            isCelsius={isCelsius}
-                        />
-                    </>
+                    <div className={styles.contentRow}>
+                        <div className={styles.leftCol}>
+                            <GoogleNewsFeed />
+                        </div>
+                        <div className={styles.rightCol}>
+                            <CurrentWeather 
+                                weather={currentWeather} 
+                                isCelsius={isCelsius}
+                                onNavigate={onNavigate}
+                            />
+                            <Hours 
+                                hourlyData={hourlyForecast} 
+                                isCelsius={isCelsius}
+                            />
+                            <DailyWeather 
+                                dailyData={dailyForecast} 
+                                isCelsius={isCelsius}
+                            />
+                        </div>
+                    </div>
                 )}
             </div>
                                                    <Chatbot

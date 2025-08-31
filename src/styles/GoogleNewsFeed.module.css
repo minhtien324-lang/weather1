@@ -1,0 +1,91 @@
+.container {
+  background: rgba(27, 6, 6, 0.41);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 16px;
+  color: #fff;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.title {
+  font-size: 18px;
+  margin: 0;
+}
+
+.viewAll {
+  color: #9ecbff;
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.loading, .error, .empty {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.item {
+  margin: 0;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.item:first-child {
+  border-top: none;
+}
+
+.link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.itemContent {
+  display: flex;
+  gap: 12px;
+}
+
+.itemText {
+  flex: 1;
+}
+
+.itemTitle {
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.meta {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #cfe3ff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dot {
+  opacity: 0.7;
+}
+
+.author {
+  opacity: 0.95;
+}
+
+.date {
+  opacity: 0.85;
+}
+
+
+
+

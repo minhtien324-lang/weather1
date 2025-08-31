@@ -193,3 +193,4 @@ GEMINI_API_KEY=your_dev_key
 ---
 
 **Lưu ý**: Đảm bảo tuân thủ [Google AI Terms of Service](https://ai.google.dev/terms) khi sử dụng Gemini API.
+
