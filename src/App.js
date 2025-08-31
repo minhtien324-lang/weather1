@@ -3,6 +3,7 @@ import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
 import { WeatherProvider, useWeather } from './context/WeatherContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import ErrorBoundary from './components/ErrorBoundary';
 import styles from './styles/GlobalWeather.module.css';
 
 function AppContent() {
@@ -28,11 +29,8 @@ function AppContent() {
     return (
         <div className={`${styles.appContainer} ${weatherClass ? styles[weatherClass] : ''}`}>
             <div className={styles.content}>
-                {!user ? (
-                    <AuthPage onClose={() => navigateTo('home')} />
-                ) : (
-                    currentPage === 'home' && <HomePage onNavigate={navigateTo} />
-                )}
+                {currentPage === 'home' && <HomePage onNavigate={navigateTo} />}
+                {currentPage === 'auth' && <AuthPage onClose={() => navigateTo('home')} onNavigate={navigateTo} />}
             </div>
         </div>
     );
@@ -40,11 +38,13 @@ function AppContent() {
 
 function App() {
     return (
-        <AuthProvider>
-            <WeatherProvider>
-                <AppContent />
-            </WeatherProvider>
-        </AuthProvider>
+        <ErrorBoundary>
+            <AuthProvider>
+                <WeatherProvider>
+                    <AppContent />
+                </WeatherProvider>
+            </AuthProvider>
+        </ErrorBoundary>
     );
 }
 

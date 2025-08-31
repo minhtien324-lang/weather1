@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import styles from '../styles/Auth.module.css';
 
-const Register = ({ onSwitchToLogin, onClose }) => {
+const Register = ({ onSwitchToLogin, onClose, onNavigate }) => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,12 +22,43 @@ const Register = ({ onSwitchToLogin, onClose }) => {
             return;
         }
 
+        // Validate name length
+        if (name.trim().length < 2) {
+            setError('Tên phải có ít nhất 2 ký tự');
+            setLoading(false);
+            return;
+        }
+
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError('Email không hợp lệ');
+            setLoading(false);
+            return;
+        }
+
+        // Validate password length
+        if (password.length < 6) {
+            setError('Mật khẩu phải có ít nhất 6 ký tự');
+            setLoading(false);
+            return;
+        }
+
+        // Validate password confirmation
+        if (password !== confirmPassword) {
+            setError('Mật khẩu xác nhận không khớp');
+            setLoading(false);
+            return;
+        }
+
         try {
             const result = await register(name, email, password, confirmPassword);
             
             if (result.success) {
-                // Đăng ký thành công - đóng modal
-                if (onClose) {
+                // Đăng ký thành công - chuyển hướng hoặc đóng modal
+                if (onNavigate) {
+                    onNavigate('home');
+                } else if (onClose) {
                     onClose();
                 }
             } else {

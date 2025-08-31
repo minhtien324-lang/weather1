@@ -32,7 +32,8 @@ authApi.interceptors.response.use(
             // Token hết hạn hoặc không hợp lệ
             localStorage.removeItem('weatherAppToken');
             localStorage.removeItem('weatherAppUser');
-            window.location.reload();
+            // Thay vì reload toàn bộ trang, chỉ cần dispatch event để AuthContext xử lý
+            window.dispatchEvent(new CustomEvent('auth:logout'));
         }
         return Promise.reject(error);
     }
@@ -131,7 +132,15 @@ export const authUtils = {
     // Lấy user data
     getUser: () => {
         const userData = localStorage.getItem('weatherAppUser');
-        return userData ? JSON.parse(userData) : null;
+        if (!userData) return null;
+        
+        try {
+            return JSON.parse(userData);
+        } catch (parseError) {
+            console.error('Error parsing user data:', parseError);
+            localStorage.removeItem('weatherAppUser');
+            return null;
+        }
     },
 
     // Kiểm tra user đã đăng nhập chưa

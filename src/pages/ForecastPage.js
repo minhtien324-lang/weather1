@@ -21,29 +21,37 @@ function ForecastPage({ onNavigate }) {
             setCurrentWeather(currentData);
 
             const fiveDayForecastData = await fetchFiveDayForecast(lat, lon);
-            setHours(fiveDayForecastData.list.slice(0, 24)); // Hiển thị 24 giờ
+            if (fiveDayForecastData.list && Array.isArray(fiveDayForecastData.list)) {
+                setHours(fiveDayForecastData.list.slice(0, 24)); // Hiển thị 24 giờ
 
-            const dailyMap = new Map();
-            fiveDayForecastData.list.forEach(item => {
-                const date = new Date(item.dt * 1000);
-                const day = date.toLocaleDateString('en-CA');
-                if (!dailyMap.has(day)) {
-                    dailyMap.set(day, {
-                        dt: item.dt,
-                        temp: {
-                            min: item.main.temp_min,
-                            max: item.main.temp_max
-                        },
-                        weather: item.weather,
-                    });
-                } else {
-                    const existing = dailyMap.get(day);
-                    existing.temp.min = Math.min(existing.temp.min, item.main.temp_min);
-                    existing.temp.max = Math.max(existing.temp.max, item.main.temp_max);
-                }
-            });
-            const processedDailyData = Array.from(dailyMap.values()).sort((a, b) => a.dt - b.dt);
-            setDailyWeather(processedDailyData.slice(0, 7));
+                const dailyMap = new Map();
+                fiveDayForecastData.list.forEach(item => {
+                    if (!item || !item.main || !item.weather || !Array.isArray(item.weather) || item.weather.length === 0) {
+                        return; // Bỏ qua item không hợp lệ
+                    }
+                    const date = new Date(item.dt * 1000);
+                    const day = date.toLocaleDateString('en-CA');
+                    if (!dailyMap.has(day)) {
+                        dailyMap.set(day, {
+                            dt: item.dt,
+                            temp: {
+                                min: item.main.temp_min || 0,
+                                max: item.main.temp_max || 0
+                            },
+                            weather: item.weather,
+                        });
+                    } else {
+                        const existing = dailyMap.get(day);
+                        existing.temp.min = Math.min(existing.temp.min, item.main.temp_min || 0);
+                        existing.temp.max = Math.max(existing.temp.max, item.main.temp_max || 0);
+                    }
+                });
+                const processedDailyData = Array.from(dailyMap.values()).sort((a, b) => a.dt - b.dt);
+                setDailyWeather(processedDailyData.slice(0, 7));
+            } else {
+                setHours([]);
+                setDailyWeather([]);
+            }
         } catch (err) {
             console.error("Lỗi khi tải dữ liệu thời tiết: ", err);
             setError(`Không thể tải dữ liệu thời tiết cho ${cityNameForCurrent}. Vui lòng thử lại sau.`);

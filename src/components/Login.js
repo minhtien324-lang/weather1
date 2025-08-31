@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import styles from '../styles/Auth.module.css';
 
-const Login = ({ onSwitchToRegister, onClose }) => {
+const Login = ({ onSwitchToRegister, onClose, onNavigate }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -20,12 +20,29 @@ const Login = ({ onSwitchToRegister, onClose }) => {
             return;
         }
 
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError('Email không hợp lệ');
+            setLoading(false);
+            return;
+        }
+
+        // Validate password length
+        if (password.length < 6) {
+            setError('Mật khẩu phải có ít nhất 6 ký tự');
+            setLoading(false);
+            return;
+        }
+
         try {
             const result = await login(email, password);
             
             if (result.success) {
-                // Đăng nhập thành công - đóng modal
-                if (onClose) {
+                // Đăng nhập thành công - chuyển hướng hoặc đóng modal
+                if (onNavigate) {
+                    onNavigate('home');
+                } else if (onClose) {
                     onClose();
                 }
             } else {

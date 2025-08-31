@@ -32,12 +32,17 @@ export const AuthProvider = ({ children }) => {
                     // Fallback cho localStorage nếu không có token
                     const savedUser = localStorage.getItem('weatherAppUser');
                     if (savedUser) {
-                        const parsedUser = JSON.parse(savedUser);
-                        const formattedUser = {
-                            ...parsedUser,
-                            name: parsedUser.full_name || parsedUser.name || parsedUser.username || 'User'
-                        };
-                        setUser(formattedUser);
+                        try {
+                            const parsedUser = JSON.parse(savedUser);
+                            const formattedUser = {
+                                ...parsedUser,
+                                name: parsedUser.full_name || parsedUser.name || parsedUser.username || 'User'
+                            };
+                            setUser(formattedUser);
+                        } catch (parseError) {
+                            console.error('Error parsing saved user data:', parseError);
+                            localStorage.removeItem('weatherAppUser');
+                        }
                     }
                 }
             } catch (error) {
@@ -50,6 +55,17 @@ export const AuthProvider = ({ children }) => {
         };
 
         checkAuth();
+
+        // Lắng nghe event logout từ interceptor
+        const handleLogout = () => {
+            setUser(null);
+        };
+
+        window.addEventListener('auth:logout', handleLogout);
+        
+        return () => {
+            window.removeEventListener('auth:logout', handleLogout);
+        };
     }, []);
 
     const login = async (email, password) => {
