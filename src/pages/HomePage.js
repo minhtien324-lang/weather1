@@ -336,6 +336,12 @@ function HomePage({ onNavigate }) {
                     <h1 className={styles.title}>Weather App</h1>
                     <div className={styles.headerControls}>
                         <button 
+                            className={styles.bannerLoginBtn}
+                            onClick={() => onNavigate('blog')}
+                        >
+                            Blog
+                        </button>
+                        <button 
                             className={styles.tempToggle}
                             onClick={() => setIsCelsius(!isCelsius)}
                         >
