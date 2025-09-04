@@ -48,9 +48,18 @@ export const blogApi = {
   remove: async (id) => {
     const { data } = await api.delete(`/blog/${id}`);
     return data;
+  },
+  listComments: async (postId) => {
+    const { data } = await api.get(`/blog/${postId}/comments`);
+    return data;
+  },
+  addComment: async (postId, content) => {
+    const { data } = await api.post(`/blog/${postId}/comments`, { content });
+    return data;
   }
 };
 
 export default blogApi;
+
 
 

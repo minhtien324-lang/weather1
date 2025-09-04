@@ -37,6 +37,9 @@ function HomePage({ onNavigate }) {
         try {
             const currentData = await fetchCurrentWeather(lat, lon);
             setCurrentWeather(currentData);
+            try {
+                localStorage.setItem('lastCurrentWeather', JSON.stringify(currentData));
+            } catch (e) {}
             
             // Cập nhật background toàn cục dựa trên thời tiết
             updateWeatherBackground(currentData);
