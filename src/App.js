@@ -41,6 +41,7 @@ function AppContent() {
                         onBack={() => navigateTo('home')} 
                         onCreate={() => navigateTo('blog-create')} 
                         onOpenDetail={(id) => { setSelectedPostId(id); navigateTo('blog-detail'); }}
+                        onEdit={(id) => { setSelectedPostId(id); navigateTo('blog-edit'); }}
                     />
                 )}
                 {currentPage === 'blog-admin' && <AdminBlogPage onBack={() => navigateTo('home')} />}

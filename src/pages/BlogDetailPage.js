@@ -9,6 +9,9 @@ function BlogDetailPage({ postId, onBack, onEdit }) {
   const [error, setError] = useState('');
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState('');
+  const [editingComment, setEditingComment] = useState(null);
+  const [editContent, setEditContent] = useState('');
+  const [openMenu, setOpenMenu] = useState(null);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -74,9 +77,89 @@ function BlogDetailPage({ postId, onBack, onEdit }) {
           <h4 style={{ marginTop: 0 }}>Bình luận</h4>
           {comments.length === 0 && <div className={styles.meta}>Chưa có bình luận</div>}
           {comments.map((c) => (
-            <div key={c.id} style={{ padding: '8px 0', borderBottom: '1px solid #eee' }}>
-              <div className={styles.meta} style={{ marginBottom: 4 }}>{c.author_name || c.author_username} • {new Date(c.created_at).toLocaleString('vi-VN')}</div>
-              <div style={{ whiteSpace: 'pre-wrap' }}>{c.content}</div>
+            <div key={c.id} className={styles.commentItem}>
+              <div className={styles.commentHeader}>
+                <div className={styles.meta}>{c.author_name || c.author_username} • {new Date(c.created_at).toLocaleString('vi-VN')}</div>
+                {user && (c.author_username === user.username || user.role === 'admin') && (
+                  <div className={styles.commentMenu}>
+                    <button 
+                      className={styles.menuButton}
+                      onClick={() => setOpenMenu(openMenu === c.id ? null : c.id)}
+                    >
+                      ⋯
+                    </button>
+                    {openMenu === c.id && (
+                      <div className={styles.menuDropdown}>
+                        <button 
+                          className={styles.menuItem}
+                          onClick={() => {
+                            setEditingComment(c.id);
+                            setEditContent(c.content);
+                            setOpenMenu(null);
+                          }}
+                        >
+                          Chỉnh sửa
+                        </button>
+                        <button 
+                          className={`${styles.menuItem} ${styles.danger}`}
+                          onClick={async () => {
+                            if (window.confirm('Xóa bình luận này?')) {
+                              try {
+                                await blogApi.deleteComment(postId, c.id);
+                                const updatedComments = await blogApi.listComments(postId);
+                                setComments(updatedComments.items || []);
+                              } catch (e) {
+                                alert(e?.error || 'Không thể xóa bình luận');
+                              }
+                            }
+                            setOpenMenu(null);
+                          }}
+                        >
+                          Xóa
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+              {editingComment === c.id ? (
+                <div className={styles.editForm}>
+                  <textarea 
+                    className={styles.editTextarea}
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                  />
+                  <div className={styles.editActions}>
+                    <button 
+                      className={styles.editBtn}
+                      onClick={async () => {
+                        try {
+                          await blogApi.updateComment(postId, c.id, editContent);
+                          const updatedComments = await blogApi.listComments(postId);
+                          setComments(updatedComments.items || []);
+                          setEditingComment(null);
+                          setEditContent('');
+                        } catch (e) {
+                          alert(e?.error || 'Không thể cập nhật bình luận');
+                        }
+                      }}
+                    >
+                      Lưu
+                    </button>
+                    <button 
+                      className={styles.cancelBtn}
+                      onClick={() => {
+                        setEditingComment(null);
+                        setEditContent('');
+                      }}
+                    >
+                      Hủy
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ whiteSpace: 'pre-wrap' }}>{c.content}</div>
+              )}
             </div>
           ))}
 

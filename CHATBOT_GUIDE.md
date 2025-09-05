@@ -156,3 +156,6 @@ AI: [Hiểu bạn muốn hỏi thời tiết TP.HCM]
 **Lưu ý**: Chatbot sử dụng AI để trả lời, vì vậy câu trả lời có thể thay đổi theo thời gian. Luôn kiểm tra thông tin quan trọng từ nguồn đáng tin cậy.
 
 
+
+
+

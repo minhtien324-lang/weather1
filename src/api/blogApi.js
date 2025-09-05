@@ -56,6 +56,14 @@ export const blogApi = {
   addComment: async (postId, content) => {
     const { data } = await api.post(`/blog/${postId}/comments`, { content });
     return data;
+  },
+  updateComment: async (postId, commentId, content) => {
+    const { data } = await api.put(`/blog/${postId}/comments/${commentId}`, { content });
+    return data;
+  },
+  deleteComment: async (postId, commentId) => {
+    const { data } = await api.delete(`/blog/${postId}/comments/${commentId}`);
+    return data;
   }
 };
 
