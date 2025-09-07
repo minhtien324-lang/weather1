@@ -137,22 +137,7 @@ DB_NAME=weather_app
 - Đề xuất tính năng: Gửi pull request
 - Hỗ trợ kỹ thuật: Kiểm tra tài liệu trong thư mục docs/
 
-## 📈 Roadmap
 
-### Phiên bản tiếp theo
-- [ ] Voice Chat (trò chuyện bằng giọng nói)
-- [ ] Image Recognition (nhận diện hình ảnh)
-- [ ] Multi-language Support (hỗ trợ nhiều ngôn ngữ)
-- [ ] Personalization (tùy chỉnh theo sở thích)
-- [ ] Mobile App (ứng dụng di động)
-
-### Cải tiến AI
-- [ ] Better context understanding
-- [ ] Multi-modal responses
-- [ ] Learning from user feedback
-- [ ] Custom AI models
-
----
 
 **Lưu ý**: Đây là dự án demo, vui lòng không sử dụng cho mục đích thương mại mà không có sự cho phép.
 
