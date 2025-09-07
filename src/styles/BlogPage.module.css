@@ -1,0 +1,239 @@
+.container {
+  color: #fdfdfd;
+  padding: 16px;
+}
+
+.weatherBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(0,119,255,0.12) 0%, rgba(0,200,255,0.12) 100%);
+  border: 1px solid rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+}
+
+.weatherLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.temp {
+  color: #fdfdfd;
+  font-size: 32px;
+  font-weight: 700;
+}
+
+.weatherDesc {
+  color: #fdfdfd;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.button {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.headingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.title {
+  color: #fbecec;
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: #181717;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: #f5f5f5;
+}
+
+.coverCard {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+  background: #000;
+}
+
+.coverFull {
+  width: 100%;
+  max-height: 70vh;
+  object-fit: contain;
+  background: #000;
+}
+
+.cardBody {
+  padding: 12px;
+}
+
+.excerpt {
+  color: #555;
+  margin: 6px 0 10px 0;
+}
+
+.meta {
+  font-size: 12px;
+  color: #666;
+}
+
+.editor {
+  border: 1px solid #eee;
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 20px;
+}
+
+.field {
+  margin-bottom: 10px;
+}
+
+.input, .textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.textarea {
+  min-height: 120px;
+}
+
+.submitBtn {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+}
+
+.commentItem {
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  position: relative;
+}
+
+.commentHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.commentMenu {
+  position: relative;
+  display: inline-block;
+}
+
+.menuButton {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 16px;
+  color: #666;
+}
+
+.menuDropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  z-index: 1000;
+  min-width: 120px;
+}
+
+.menuItem {
+  display: block;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: #333;
+}
+
+.menuItem:hover {
+  background: #f5f5f5;
+}
+
+.menuItem.danger {
+  color: #dc3545;
+}
+
+.editForm {
+  margin-top: 8px;
+}
+
+.editTextarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.editActions {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+.editBtn, .cancelBtn {
+  padding: 4px 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: white;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.editBtn {
+  background: #007bff;
+  color: white;
+  border-color: #007bff;
+}
+
+.cancelBtn {
+  background: #6c757d;
+  color: white;
+  border-color: #6c757d;
+}
+

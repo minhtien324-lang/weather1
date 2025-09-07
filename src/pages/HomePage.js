@@ -37,6 +37,9 @@ function HomePage({ onNavigate }) {
         try {
             const currentData = await fetchCurrentWeather(lat, lon);
             setCurrentWeather(currentData);
+            try {
+                localStorage.setItem('lastCurrentWeather', JSON.stringify(currentData));
+            } catch (e) {}
             
             // Cập nhật background toàn cục dựa trên thời tiết
             updateWeatherBackground(currentData);
@@ -335,6 +338,12 @@ function HomePage({ onNavigate }) {
                 <header className={styles.header}>
                     <h1 className={styles.title}>Weather App</h1>
                     <div className={styles.headerControls}>
+                        <button 
+                            className={styles.bannerLoginBtn}
+                            onClick={() => onNavigate('blog')}
+                        >
+                            Blog
+                        </button>
                         <button 
                             className={styles.tempToggle}
                             onClick={() => setIsCelsius(!isCelsius)}
