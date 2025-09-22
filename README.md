@@ -1,5 +1,26 @@
 # 🌤️ Weather App với AI Chatbot Mở rộng
 
+## Backend API tests (Postman/Newman)
+
+Run backend endpoint tests with Postman collection provided in `postman/`.
+
+### Quick start
+1. Install Newman CLI globally (one-time):
+   ```bash
+   npm i -g newman
+   ```
+2. Run tests:
+   ```bash
+   npm run api:test
+   ```
+   This executes the collection against `http://localhost:3000/api`.
+
+### Files
+- `postman/WeatherApp.postman_collection.json`
+- `postman/WeatherApp.postman_environment.json`
+
+Adjust environment variables (username/password) to match your backend.
+
 Ứng dụng thời tiết thông minh với chatbot AI có thể trả lời **mọi câu hỏi**, không chỉ riêng về thời tiết!
 
 ## 🌟 Tính năng chính

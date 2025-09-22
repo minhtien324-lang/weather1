@@ -1,0 +1,336 @@
+{
+  "info": {
+    "name": "WeatherApp Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET /api/health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "POST /api/auth/register",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser{{randomInt}}\",\n  \"email\": \"test{{randomInt}}@example.com\",\n  \"password\": \"Password123!\",\n  \"full_name\": \"Test User\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/register",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth","register"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/auth/login",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth","login"]
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Login success', function () {",
+                  "  pm.response.to.have.status(200);",
+                  "  const json = pm.response.json();",
+                  "  pm.expect(json.token).to.exist;",
+                  "  pm.environment.set('token', json.token);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /api/auth/me",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth","me"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/auth/profile",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"full_name\": \"Updated User\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/profile",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth","profile"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/auth/change-password",
+          "request": {
+            "method": "PUT",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"oldPassword\": \"{{password}}\",\n  \"newPassword\": \"Password1234!\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/change-password",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth","change-password"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST /api/auth/logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Authorization", "value": "Bearer {{token}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/logout",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth","logout"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Weather",
+      "item": [
+        {
+          "name": "GET /api/search?q=Hanoi",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/search?q=Hanoi",
+              "host": ["{{baseUrl}}"],
+              "path": ["search"],
+              "query": [{"key": "q", "value": "Hanoi"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/weather/coordinates?lat=21.0278&lon=105.8342",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/weather/coordinates?lat=21.0278&lon=105.8342",
+              "host": ["{{baseUrl}}"],
+              "path": ["weather","coordinates"],
+              "query": [
+                {"key": "lat", "value": "21.0278"},
+                {"key": "lon", "value": "105.8342"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/forecast?city=Hanoi",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/forecast?city=Hanoi",
+              "host": ["{{baseUrl}}"],
+              "path": ["forecast"],
+              "query": [{"key": "city", "value": "Hanoi"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/weather/city?city=Hanoi",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/weather/city?city=Hanoi",
+              "host": ["{{baseUrl}}"],
+              "path": ["weather","city"],
+              "query": [{"key": "city", "value": "Hanoi"}]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Blog",
+      "item": [
+        {
+          "name": "GET /api/blog (public)",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/blog", "host": ["{{baseUrl}}"], "path": ["blog"] } },
+          "response": []
+        },
+        {
+          "name": "GET /api/blog/admin",
+          "request": { "method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": { "raw": "{{baseUrl}}/blog/admin", "host": ["{{baseUrl}}"], "path": ["blog","admin"] } },
+          "response": []
+        },
+        {
+          "name": "POST /api/blog",
+          "request": {
+            "method": "POST",
+            "header": [
+              {"key": "Authorization", "value": "Bearer {{token}}"}
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "title", "value": "Sample Post"},
+                {"key": "content", "value": "Hello world"},
+                {"key": "status", "value": "published"}
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/blog", "host": ["{{baseUrl}}"], "path": ["blog"] }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/blog/:id",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/blog/{{postId}}", "host": ["{{baseUrl}}"], "path": ["blog","{{postId}}"] } },
+          "response": []
+        },
+        {
+          "name": "PUT /api/blog/:id",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "title", "value": "Updated Title"}
+              ]
+            },
+            "url": { "raw": "{{baseUrl}}/blog/{{postId}}", "host": ["{{baseUrl}}"], "path": ["blog","{{postId}}"] }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/blog/:id",
+          "request": { "method": "DELETE", "header": [{"key": "Authorization", "value": "Bearer {{token}}"}], "url": { "raw": "{{baseUrl}}/blog/{{postId}}", "host": ["{{baseUrl}}"], "path": ["blog","{{postId}}"] } },
+          "response": []
+        },
+        {
+          "name": "GET /api/blog/:id/comments",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/blog/{{postId}}/comments", "host": ["{{baseUrl}}"], "path": ["blog","{{postId}}","comments"] } },
+          "response": []
+        },
+        {
+          "name": "POST /api/blog/:id/comments",
+          "request": {
+            "method": "POST",
+            "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{token}}"}],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Nice post!\"\n}" },
+            "url": { "raw": "{{baseUrl}}/blog/{{postId}}/comments", "host": ["{{baseUrl}}"], "path": ["blog","{{postId}}","comments"] }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /api/blog/:id/comments/:commentId",
+          "request": {
+            "method": "PUT",
+            "header": [{"key": "Content-Type", "value": "application/json"}, {"key": "Authorization", "value": "Bearer {{token}}"}],
+            "body": { "mode": "raw", "raw": "{\n  \"content\": \"Edited comment\"\n}" },
+            "url": { "raw": "{{baseUrl}}/blog/{{postId}}/comments/{{commentId}}", "host": ["{{baseUrl}}"], "path": ["blog","{{postId}}","comments","{{commentId}}"] }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /api/blog/:id/comments/:commentId",
+          "request": {
+            "method": "DELETE",
+            "header": [{"key": "Authorization", "value": "Bearer {{token}}"}],
+            "url": { "raw": "{{baseUrl}}/blog/{{postId}}/comments/{{commentId}}", "host": ["{{baseUrl}}"], "path": ["blog","{{postId}}","comments","{{commentId}}"] }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Gemini",
+      "item": [
+        {
+          "name": "POST /api/gemini/chat",
+          "request": {
+            "method": "POST",
+            "header": [ {"key": "Content-Type", "value": "application/json"} ],
+            "body": { "mode": "raw", "raw": "{\n  \"message\": \"Xin chào!\",\n  \"context\": {}\n}" },
+            "url": { "raw": "{{baseUrl}}/gemini/chat", "host": ["{{baseUrl}}"], "path": ["gemini","chat"] }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /api/gemini/info",
+          "request": { "method": "GET", "url": { "raw": "{{baseUrl}}/gemini/info", "host": ["{{baseUrl}}"], "path": ["gemini","info"] } },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": []
+}
+
+
+

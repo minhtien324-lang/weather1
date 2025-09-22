@@ -24,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "api:test": "newman run postman/WeatherApp.postman_collection.json -e postman/WeatherApp.postman_environment.json --reporters cli,junit --reporter-junit-export postman/results.xml"
   },
   "eslintConfig": {
     "extends": [
